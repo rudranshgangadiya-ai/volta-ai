@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_2.html -->
+<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,7 +79,9 @@
     const inputEl = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
 
-    const API_KEY = 'PASTE_YOUR_AIZASY_KEY_HERE';
+    // ⚠️ REPLACE THE TEXT BELOW WITH YOUR ACTUAL GEMINI API KEY
+    // Get your key from: https://aistudio.google.com/app/apikey
+    const API_KEY = 'YOUR_GEMINI_API_KEY_HERE';
 
     const history = [];
 
@@ -114,6 +116,13 @@
 
     async function sendMessage(text) {
       if (!text) return;
+
+      // Check if API key is still the placeholder
+      if (API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+        addMessage('bot', '⚠️ Please set your Gemini API key in the code first! Open index.html and replace YOUR_GEMINI_API_KEY_HERE with your real key from aistudio.google.com');
+        return;
+      }
+
       inputEl.value = '';
       sendBtn.disabled = true;
       addMessage('user', text);
@@ -148,6 +157,5 @@
     sendBtn.addEventListener('click', () => sendMessage(inputEl.value.trim()));
     inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(inputEl.value.trim()); });
   </script>
-
 
 </body></html>
