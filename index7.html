@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volta AI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f6ff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header { background: #1a6fd4; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+    .logo { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #1a6fd4; }
+    .header-text .name { color: white; font-size: 18px; font-weight: 600; }
+    .header-text .tagline { color: rgba(255,255,255,0.75); font-size: 12px; }
+    .status { margin-left: auto; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); font-size: 12px; }
+    .dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .dev-banner { background: #e0edff; text-align: center; font-size: 13px; color: #1a6fd4; font-weight: 500; padding: 8px 16px; border-bottom: 1px solid #bfdbfe; }
+    #messages { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .msg { display: flex; gap: 10px; align-items: flex-end; max-width: 100%; }
+    .msg.user { flex-direction: row-reverse; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+    .bot-av { background: #1a6fd4; color: white; }
+    .user-av { background: #dbeafe; color: #1a6fd4; }
+    .bubble { max-width: 72%; padding: 11px 16px; font-size: 14px; line-height: 1.65; border-radius: 18px; }
+    .msg.bot .bubble { background: white; color: #1e293b; border: 1px solid #e2ecff; border-bottom-left-radius: 4px; }
+    .msg.user .bubble { background: #1a6fd4; color: white; border-bottom-right-radius: 4px; }
+    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 13px 16px; }
+    .typing-dots span { width: 7px; height: 7px; background: #1a6fd4; border-radius: 50%; animation: bounce 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
+    #input-area { padding: 14px 16px; background: white; border-top: 1px solid #dbeafe; display: flex; gap: 10px; align-items: center; }
+    #user-input { flex: 1; border: 1px solid #bfdbfe; border-radius: 24px; padding: 11px 18px; font-size: 14px; outline: none; font-family: inherit; color: #1e293b; background: #f8fbff; }
+    #user-input:focus { border-color: #1a6fd4; background: white; }
+    #send-btn { width: 44px; height: 44px; background: #1a6fd4; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #send-btn:hover { background: #1558b0; }
+    #send-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+    #send-btn svg { width: 20px; height: 20px; fill: white; }
+    .footer-note { text-align: center; font-size: 11px; color: #94a3b8; padding: 6px 0 8px; background: white; }
+    .welcome { background: white; border: 1px solid #dbeafe; border-radius: 14px; padding: 18px 20px; text-align: center; margin-bottom: 4px; }
+    .welcome .icon { font-size: 32px; margin-bottom: 8px; }
+    .welcome h2 { font-size: 16px; color: #1a6fd4; font-weight: 600; margin-bottom: 6px; }
+    .welcome p { font-size: 13px; color: #64748b; line-height: 1.6; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; justify-content: center; }
+    .chip { background: #eff6ff; border: 1px solid #bfdbfe; color: #1a6fd4; font-size: 12px; padding: 6px 12px; border-radius: 20px; cursor: pointer; }
+    .chip:hover { background: #dbeafe; }
+    #intro-overlay {
+      position: fixed; inset: 0; background: #1a6fd4;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 999; padding: 32px; transition: opacity 0.6s ease;
+    }
+    #intro-overlay .intro-logo {
+      width: 72px; height: 72px; background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 32px; color: #1a6fd4;
+      margin-bottom: 24px; animation: popIn 0.5s ease;
+    }
+    @keyframes popIn { 0%{transform:scale(0.5);opacity:0} 100%{transform:scale(1);opacity:1} }
+    #intro-overlay .intro-text {
+      font-size: clamp(18px, 5vw, 28px); font-weight: 600; color: white;
+      text-align: center; line-height: 1.6; min-height: 90px; max-width: 480px;
+    }
+    #intro-overlay .intro-text .cursor {
+      display: inline-block; width: 2px; height: 1.1em; background: white;
+      vertical-align: middle; margin-left: 3px; animation: blink 0.75s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    #intro-overlay .intro-sub {
+      margin-top: 10px; font-size: 14px; color: rgba(255,255,255,0.65);
+      text-align: center; opacity: 0;
+    }
+    #intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+ 
+  <div id="intro-overlay">
+    <div class="intro-logo">V</div>
+    <div class="intro-text" id="intro-typed"></div>
+    <div class="intro-sub" id="intro-sub">Powered by Llama AI · Free Forever</div>
+  </div>
+ 
+  <header>
+    <div class="logo">V</div>
+    <div class="header-text">
+      <div class="name">Volta</div>
+      <div class="tagline">Your personal AI assistant</div>
+    </div>
+    <div class="status"><div class="dot"></div> Online</div>
+  </header>
+ 
+  <div class="dev-banner">⚡ This AI is developed by Rushang</div>
+ 
+  <div id="messages">
+    <div class="welcome">
+      <div class="icon">⚡</div>
+      <h2>Welcome to Volta!</h2>
+      <p>I'm your smart AI assistant. Ask me anything — from general knowledge to writing, coding, math, and more!</p>
+      <div class="chips">
+        <div class="chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</div>
+        <div class="chip" onclick="quickAsk('Write a short poem')">Write a poem</div>
+        <div class="chip" onclick="quickAsk('Help me with my studies')">Study help</div>
+        <div class="chip" onclick="quickAsk('What can you do?')">What can you do?</div>
+      </div>
+    </div>
+  </div>
+  <div id="input-area">
+    <input id="user-input" type="text" placeholder="Ask Volta anything..." autocomplete="off">
+    <button id="send-btn" aria-label="Send message">
+      <svg viewBox="0 0 24 24"><path d="M2 12L22 2L15 22L11 13L2 12Z"></path></svg>
+    </button>
+  </div>
+  <div class="footer-note">Powered by Llama AI · Volta</div>
+ 
+  <script>
+    const introLines = ["Hey! 👋 Welcome to Volta AI", "Developed by Rushang ⚡"];
+    const el = document.getElementById('intro-typed');
+    const subEl = document.getElementById('intro-sub');
+    const overlay = document.getElementById('intro-overlay');
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    el.appendChild(cursor);
+    let charIndex = 0, lineIndex = 0;
+    function typeNext() {
+      const line = introLines[lineIndex];
+      if (charIndex < line.length) {
+        cursor.insertAdjacentText('beforebegin', line[charIndex]);
+        charIndex++;
+        setTimeout(typeNext, 55);
+      } else if (lineIndex < introLines.length - 1) {
+        lineIndex++; charIndex = 0;
+        setTimeout(() => {
+          cursor.insertAdjacentElement('beforebegin', document.createElement('br'));
+          setTimeout(typeNext, 50);
+        }, 550);
+      } else {
+        setTimeout(() => {
+          subEl.style.transition = 'opacity 0.6s';
+          subEl.style.opacity = '1';
+          setTimeout(() => {
+            overlay.classList.add('fade-out');
+            setTimeout(() => overlay.remove(), 700);
+          }, 1500);
+        }, 350);
+      }
+    }
+    setTimeout(typeNext, 400);
+  </script>
+ 
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl    = document.getElementById('user-input');
+    const sendBtn    = document.getElementById('send-btn');
+ 
+    const API_KEY = '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';
+    const history = [{ role: 'system', content: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful at all times. Keep responses concise and easy to understand.' }];
+ 
+    function addMessage(role, text) {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+      const av = document.createElement('div');
+      av.className = 'avatar ' + (role === 'user' ? 'user-av' : 'bot-av');
+      av.textContent = role === 'user' ? 'You' : 'V';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      wrap.appendChild(av);
+      wrap.appendChild(bubble);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+ 
+    function showTyping() {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg bot'; wrap.id = 'typing';
+      wrap.innerHTML = '<div class="avatar bot-av">V</div><div class="bubble typing-dots"><span></span><span></span><span></span></div>';
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+ 
+    function removeTyping() {
+      const t = document.getElementById('typing');
+      if (t) t.remove();
+    }
+ 
+    async function sendMessage(text) {
+      if (!text) return;
+      inputEl.value = '';
+      sendBtn.disabled = true;
+      addMessage('user', text);
+      history.push({ role: 'user', content: text });
+      showTyping();
+      try {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
+          },
+          body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: history,
+            max_tokens: 1024
+          })
+        });
+        const data = await res.json();
+        removeTyping();
+        const reply = data.choices && data.choices[0] ? data.choices[0].message.content : 'Sorry, I could not get a response. Please try again.';
+        history.push({ role: 'assistant', content: reply });
+        addMessage('bot', reply);
+      } catch (e) {
+        removeTyping();
+        addMessage('bot', 'Oops! Something went wrong: ' + e.message);
+      }
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+ 
+    window.quickAsk = (text) => sendMessage(text);
+    sendBtn.addEventListener('click', () => sendMessage(inputEl.value.trim()));
+    inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(inputEl.value.trim()); });
+  </script>
+ 
+</body></html>
