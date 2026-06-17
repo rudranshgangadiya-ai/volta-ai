@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_1.html -->
+<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_3.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Volta AI</title>
   <style>
@@ -79,9 +78,7 @@
     const inputEl = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
 
-    // ⚠️ REPLACE THE TEXT BELOW WITH YOUR ACTUAL GEMINI API KEY
-    // Get your key from: https://aistudio.google.com/app/apikey
-    const API_KEY = 'YOUR_GEMINI_API_KEY_HERE';
+    const API_KEY = 'AIzaSyCk72fMh_oo9Z3TW6BmLR1sMhBv84rAyYU';
 
     const history = [];
 
@@ -116,13 +113,6 @@
 
     async function sendMessage(text) {
       if (!text) return;
-
-      // Check if API key is still the placeholder
-      if (API_KEY === 'AIzaSyCk72fMh_oo9Z3TW6BmLR1sMhBv84rAyYU') {
-        addMessage('bot', '⚠️ Please set your Gemini API key in the code first! Open index.html and replace YOUR_GEMINI_API_KEY_HERE with your real key from aistudio.google.com');
-        return;
-      }
-
       inputEl.value = '';
       sendBtn.disabled = true;
       addMessage('user', text);
