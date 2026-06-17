@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_1.html -->
+<!-- saved from url=(0048)file:///C:/Users/integrated/Downloads/index.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Volta AI</title>
   <style>
@@ -74,16 +73,22 @@
     </button>
   </div>
   <div class="footer-note">Powered by Gemini AI · Volta</div>
-  <script>
+  <script type="module">
+    import { GoogleGenerativeAI } from 'https://esm.run/@google/generative-ai';
+
     const messagesEl = document.getElementById('messages');
     const inputEl = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
 
-    // ⚠️ REPLACE THE TEXT BELOW WITH YOUR ACTUAL GEMINI API KEY
-    // Get your key from: https://aistudio.google.com/app/apikey
-    const API_KEY = 'AQ.Ab8RN6KvNIEi4yhoHES1-eSd4kN5lE17a-9twDa_mUKF8h3Jiw';
+    const API_KEY = 'AQ.Ab8RN6LmQRPJtJP7wS4rw5SEObiCpdE7CK0xiRtVl7_FRHZv1w';
 
-    const history = [];
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      systemInstruction: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful at all times. Keep responses concise and easy to understand.'
+    });
+
+    const chat = model.startChat({ history: [] });
 
     function addMessage(role, text) {
       const wrap = document.createElement('div');
@@ -116,44 +121,24 @@
 
     async function sendMessage(text) {
       if (!text) return;
-
-      // Check if API key is still the placeholder
-      if (API_KEY === 'AIzaSyCk72fMh_oo9Z3TW6BmLR1sMhBv84rAyYU') {
-        addMessage('bot', '⚠️ Please set your Gemini API key in the code first! Open index.html and replace AQ.Ab8RN6KvNIEi4yhoHES1-eSd4kN5lE17a-9twDa_mUKF8h3Jiw');
-        return;
-      }
-
       inputEl.value = '';
       sendBtn.disabled = true;
       addMessage('user', text);
-      history.push({ role: 'user', parts: [{ text }] });
       showTyping();
       try {
-        const res = await fetch(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + API_KEY,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              system_instruction: { parts: [{ text: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful at all times. Keep responses concise and easy to understand.' }] },
-              contents: history
-            })
-          }
-        );
-        const data = await res.json();
+        const result = await chat.sendMessage(text);
+        const reply = result.response.text();
         removeTyping();
-        const reply = data.candidates && data.candidates[0] ? data.candidates[0].content.parts[0].text : 'Sorry, I could not get a response. Please try again.';
-        history.push({ role: 'model', parts: [{ text: reply }] });
         addMessage('bot', reply);
       } catch (e) {
         removeTyping();
-        addMessage('bot', 'Oops! Something went wrong. Please check your internet and try again.');
+        addMessage('bot', 'Oops! Something went wrong: ' + e.message);
       }
       sendBtn.disabled = false;
       inputEl.focus();
     }
 
-    function quickAsk(text) { sendMessage(text); }
+    window.quickAsk = (text) => sendMessage(text);
     sendBtn.addEventListener('click', () => sendMessage(inputEl.value.trim()));
     inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(inputEl.value.trim()); });
   </script>
