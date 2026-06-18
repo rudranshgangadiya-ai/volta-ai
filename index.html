@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/integrated/Downloads/volta-ai_2.html -->
+<!-- saved from url=(0053)file:///C:/Users/integrated/Downloads/volta-ai_3.html -->
 <html lang="en" data-theme="blue"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -478,6 +478,62 @@ body {
 #intro-sub { margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.6); text-align: center; opacity: 0; }
 #intro-overlay.fade-out { opacity: 0; pointer-events: none; }
 
+/* IMAGE GENERATOR */
+#img-modal .modal { width: 340px; }
+.img-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.img-input-row input {
+  flex: 1; border: 1.5px solid var(--border2); border-radius: 10px;
+  padding: 9px 12px; font-size: 13px; font-family: inherit;
+  color: var(--text); background: var(--surface2); outline: none;
+}
+.img-input-row input:focus { border-color: var(--p); }
+.img-gen-btn {
+  background: var(--p); color: white; border: none;
+  border-radius: 10px; padding: 9px 14px; font-size: 13px;
+  font-weight: 600; font-family: inherit; cursor: pointer;
+  transition: background 0.2s; white-space: nowrap;
+}
+.img-gen-btn:hover { background: var(--pd); }
+.img-gen-btn:disabled { background: var(--text3); cursor: not-allowed; }
+#img-preview {
+  width: 100%; border-radius: 12px; display: none;
+  margin-bottom: 10px; max-height: 280px; object-fit: cover;
+  border: 1px solid var(--border);
+}
+.img-placeholder {
+  width: 100%; height: 180px; border-radius: 12px;
+  background: var(--surface2); border: 1.5px dashed var(--border2);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; color: var(--text3);
+  font-size: 13px; margin-bottom: 12px;
+}
+.img-placeholder span { font-size: 32px; }
+.img-loading { display: none; text-align: center; padding: 16px 0; color: var(--text2); font-size: 13px; }
+.img-loading-dots { display: inline-flex; gap: 5px; margin-left: 6px; }
+.img-loading-dots span { width: 6px; height: 6px; background: var(--p); border-radius: 50%; animation: bounce 1.3s ease-in-out infinite; }
+.img-loading-dots span:nth-child(2) { animation-delay: 0.18s; }
+.img-loading-dots span:nth-child(3) { animation-delay: 0.36s; }
+.img-actions { display: flex; gap: 8px; }
+.img-dl-btn {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 9px; font-size: 13px; font-family: inherit;
+  color: var(--text2); cursor: pointer; transition: all 0.15s; display: none;
+}
+.img-dl-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+/* image bubble in chat */
+.img-bubble { background: var(--bot-bubble); border: 1px solid var(--border); border-radius: 18px; border-bottom-left-radius: 5px; overflow: hidden; box-shadow: var(--shadow-sm); max-width: 280px; }
+.img-bubble img { width: 100%; display: block; cursor: pointer; transition: opacity 0.2s; }
+.img-bubble img:hover { opacity: 0.92; }
+.img-bubble-caption { padding: 8px 12px; font-size: 12px; color: var(--text2); }
+/* image btn in input */
+#img-trigger-btn {
+  width: 36px; height: 36px; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: 9px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text2); transition: all 0.15s; flex-shrink: 0; font-size: 18px;
+}
+#img-trigger-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+
 /* MOBILE */
 @media (max-width: 640px) {
   .sidebar {
@@ -514,7 +570,30 @@ body {
   </div>
 </div>
 
-<div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+<div id="img-modal" class="modal-overlay">
+  <div class="modal">
+    <h3>🎨 Generate an image</h3>
+    <div class="img-input-row">
+      <input id="img-prompt" type="text" placeholder="Describe your image...">
+      <button class="img-gen-btn" id="img-gen-btn" onclick="generateImage()">Generate</button>
+    </div>
+    <div class="img-placeholder" id="img-placeholder">
+      <span>🖼️</span>
+      <div>Your image will appear here</div>
+    </div>
+    <div class="img-loading" id="img-loading">
+      Generating<div class="img-loading-dots"><span></span><span></span><span></span></div>
+    </div>
+    <img id="img-preview" alt="Generated image">
+    <div class="img-actions">
+      <button class="img-dl-btn" id="img-dl-btn" onclick="downloadImage()">⬇️ Download</button>
+      <button class="img-dl-btn" id="img-send-btn" onclick="sendImageToChat()" style="display:none">💬 Send to chat</button>
+    </div>
+    <button class="modal-close" onclick="closeModal(&#39;img-modal&#39;)" style="margin-top:10px">Close</button>
+  </div>
+</div>
+
+
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
@@ -537,6 +616,7 @@ body {
     <button class="quick-chip" onclick="quickAsk(&#39;Help me with my studies&#39;)">📚 Help with studies</button>
     <button class="quick-chip" onclick="quickAsk(&#39;Explain how AI works&#39;)">🤖 How does AI work?</button>
     <button class="quick-chip" onclick="quickAsk(&#39;Give me a coding tip&#39;)">💻 Coding tip</button>
+    <button class="quick-chip" onclick="openImgModal()">🎨 Generate an image</button>
   </div>
 
   <div class="sidebar-bottom">
@@ -580,7 +660,8 @@ body {
 
   <div class="input-area">
     <div class="input-box">
-      <textarea id="user-input" placeholder="Ask Volta anything..." rows="1" autocomplete="off"></textarea>
+      <textarea id="user-input" placeholder="Ask Volta anything... or type &#39;generate image of ...&#39;" rows="1" autocomplete="off"></textarea>
+      <button id="img-trigger-btn" onclick="openImgModal()" title="Generate image">🎨</button>
       <button id="send-btn" aria-label="Send">
         <svg viewBox="0 0 24 24"><path d="M2 12L22 2L15 22L11 13L2 12Z"></path></svg>
       </button>
@@ -781,6 +862,120 @@ inputEl.addEventListener('keydown', e => {
 inputEl.addEventListener('input', () => {
   inputEl.style.height = 'auto';
   inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+});
+
+// IMAGE GENERATOR
+let lastImgUrl = '';
+let lastImgPrompt = '';
+
+window.openImgModal = function(prefill) {
+  document.getElementById('img-modal').classList.add('open');
+  if (prefill) document.getElementById('img-prompt').value = prefill;
+  document.getElementById('img-prompt').focus();
+};
+
+window.generateImage = async function() {
+  const prompt = document.getElementById('img-prompt').value.trim();
+  if (!prompt) return;
+  const genBtn = document.getElementById('img-gen-btn');
+  const preview = document.getElementById('img-preview');
+  const placeholder = document.getElementById('img-placeholder');
+  const loading = document.getElementById('img-loading');
+  const dlBtn = document.getElementById('img-dl-btn');
+  const sendBtn2 = document.getElementById('img-send-btn');
+
+  genBtn.disabled = true; genBtn.textContent = '...';
+  placeholder.style.display = 'none';
+  preview.style.display = 'none';
+  loading.style.display = 'block';
+  dlBtn.style.display = 'none';
+  sendBtn2.style.display = 'none';
+
+  const seed = Math.floor(Math.random() * 999999);
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&nologo=true`;
+  lastImgUrl = url;
+  lastImgPrompt = prompt;
+
+  const img = new Image();
+  img.onload = () => {
+    loading.style.display = 'none';
+    preview.src = url;
+    preview.style.display = 'block';
+    dlBtn.style.display = 'block';
+    sendBtn2.style.display = 'block';
+    genBtn.disabled = false; genBtn.textContent = 'Generate';
+  };
+  img.onerror = () => {
+    loading.style.display = 'none';
+    placeholder.style.display = 'flex';
+    placeholder.innerHTML = '<span>❌</span><div>Failed to generate. Try again!</div>';
+    genBtn.disabled = false; genBtn.textContent = 'Generate';
+  };
+  img.src = url;
+};
+
+window.downloadImage = function() {
+  const a = document.createElement('a');
+  a.href = lastImgUrl;
+  a.download = 'volta-image.jpg';
+  a.target = '_blank';
+  a.click();
+};
+
+window.sendImageToChat = function() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.style.animation = 'msgIn 0.25s ease';
+  const av = document.createElement('div');
+  av.className = 'avatar bot-av'; av.textContent = 'V';
+  const msgWrap = document.createElement('div');
+  msgWrap.className = 'msg-wrap';
+  const bubble = document.createElement('div');
+  bubble.className = 'img-bubble';
+  bubble.innerHTML = `<img src="${lastImgUrl}" alt="${lastImgPrompt}" onclick="window.open('${lastImgUrl}','_blank')" /><div class="img-bubble-caption">🎨 "${lastImgPrompt}"</div>`;
+  msgWrap.appendChild(bubble);
+  wrap.appendChild(av); wrap.appendChild(msgWrap);
+  messagesEl.appendChild(wrap);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  closeModal('img-modal');
+};
+
+// Also support typing "generate image of X" directly in chat
+const _origSend = window.sendMessage;
+window.sendMessage = async function(text) {
+  const imgMatch = text.match(/^(generate|create|make|draw|show)\s+(an?\s+)?image\s+(of\s+)?(.+)/i);
+  if (imgMatch) {
+    const prompt = imgMatch[4];
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const wrap = document.createElement('div');
+      wrap.className = 'msg bot'; wrap.style.animation = 'msgIn 0.25s ease';
+      const av = document.createElement('div');
+      av.className = 'avatar bot-av'; av.textContent = 'V';
+      const msgWrap = document.createElement('div');
+      msgWrap.className = 'msg-wrap';
+      const bubble = document.createElement('div');
+      bubble.className = 'img-bubble';
+      const seed = Math.floor(Math.random() * 999999);
+      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&nologo=true`;
+      bubble.innerHTML = `<img src="${url}" alt="${prompt}" onclick="window.open('${url}','_blank')" /><div class="img-bubble-caption">🎨 "${prompt}" — click to open full size</div>`;
+      msgWrap.appendChild(bubble);
+      wrap.appendChild(av); wrap.appendChild(msgWrap);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }, 800);
+    if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+    if (sendBtn) sendBtn.disabled = false;
+    return;
+  }
+  return _origSend(text);
+};
+
+document.getElementById('img-prompt').addEventListener('keydown', e => {
+  if (e.key === 'Enter') generateImage();
 });
 
 }); // end DOMContentLoaded
