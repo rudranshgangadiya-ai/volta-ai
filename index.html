@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_3.html -->
+<!-- saved from url=(0050)file:///C:/Users/integrated/Downloads/index_4.html -->
 <html lang="en" data-theme="blue"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,20 +106,10 @@
   .theme-opt:hover, .theme-opt.active { border-color: var(--primary); }
   .theme-dot { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; }
   .close-modal { margin-top: 14px; width: 100%; padding: 9px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
-  #intro-overlay { position: fixed; inset: 0; background: #1a6fd4; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; padding: 32px; transition: opacity 0.6s ease; }
-  .intro-logo { width: 72px; height: 72px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 32px; color: #1a6fd4; margin-bottom: 24px; animation: popIn 0.5s ease; }
-  @keyframes popIn { 0%{transform:scale(0.5);opacity:0} 100%{transform:scale(1);opacity:1} }
-  .intro-text { font-size: clamp(18px,5vw,28px); font-weight: 600; color: white; text-align: center; line-height: 1.6; min-height: 90px; max-width: 480px; }
-  .cursor { display: inline-block; width: 2px; height: 1.1em; background: white; vertical-align: middle; margin-left: 3px; animation: blink 0.75s step-end infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-  .intro-sub { margin-top: 10px; font-size: 14px; color: rgba(255,255,255,0.65); text-align: center; opacity: 0; }
-  #intro-overlay.fade-out { opacity: 0; pointer-events: none; }
   @media (max-width: 480px) { .msg-wrap { max-width: 85%; } .bubble { font-size: 13px; } }
 </style>
 </head>
 <body>
-
-
 
 <div id="theme-modal">
   <div class="theme-box">
@@ -143,9 +133,9 @@
   </div>
   <div class="header-actions">
     <div class="dot"></div>
-    <button class="icon-btn" onclick="toggleDark()" title="Dark mode">🌙</button>
-    <button class="icon-btn" onclick="document.getElementById(&#39;theme-modal&#39;).classList.add(&#39;open&#39;)" title="Themes">🎨</button>
-    <button class="icon-btn" onclick="clearChat()" title="Clear chat">🗑️</button>
+    <button class="icon-btn" onclick="toggleDark()">🌙</button>
+    <button class="icon-btn" onclick="document.getElementById(&#39;theme-modal&#39;).classList.add(&#39;open&#39;)">🎨</button>
+    <button class="icon-btn" onclick="clearChat()">🗑️</button>
   </div>
 </header>
 
@@ -174,22 +164,13 @@
 <div class="footer-note">Powered by Llama AI · Volta</div>
 
 <script>
-  // ── Intro ──
-  const introLines = ["Hey! 👋 Welcome to Volta AI", "Developed by Rushang ⚡"];
-  const introEl = document.getElementById('intro-typed');
-  const subEl = document.getElementById('intro-sub');
-  const overlay = document.getElementById('intro-overlay');
-  const cur = document.createElement('span'); cur.className = 'cursor'; introEl.appendChild(cur);
-  let ci = 0, li = 0;
-  function typeNext() {
-    const line = introLines[li];
-    if (ci < line.length) { cur.insertAdjacentText('beforebegin', line[ci]); ci++; setTimeout(typeNext, 55); }
-    else if (li < introLines.length - 1) { li++; ci = 0; setTimeout(() => { cur.insertAdjacentElement('beforebegin', document.createElement('br')); setTimeout(typeNext, 50); }, 550); }
-    else { setTimeout(() => { subEl.style.transition='opacity 0.6s'; subEl.style.opacity='1'; setTimeout(() => { overlay.classList.add('fade-out'); setTimeout(() => overlay.remove(), 700); }, 1500); }, 350); }
-  }
-  setTimeout(typeNext, 400);
+  const API_KEY = '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';
+  const history = [{ role: 'system', content: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful at all times. Keep responses concise and easy to understand.' }];
+  const messagesEl = document.getElementById('messages');
+  const inputEl = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
 
-  // ── Theme ──
+  // Theme
   function setTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('volta-theme', t);
@@ -202,13 +183,18 @@
     if (cur === 'dark') { setTheme(localStorage.getItem('volta-prev-theme') || 'blue'); }
     else { localStorage.setItem('volta-prev-theme', cur); setTheme('dark'); }
   }
-  const savedTheme = localStorage.getItem('volta-theme');
-  setTheme(savedTheme || 'blue');
+  setTheme(localStorage.getItem('volta-theme') || 'blue');
 
-  // ── Markdown ──
+  // Clear
+  function clearChat() {
+    messagesEl.innerHTML = `<div class="welcome"><div class="icon">⚡</div><h2>Welcome to Volta!</h2><p>I'm your smart AI assistant. Ask me anything — from general knowledge to writing, coding, math, and more!</p><div class="chips"><div class="chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</div><div class="chip" onclick="quickAsk('Write a short poem')">Write a poem</div><div class="chip" onclick="quickAsk('Help me with my studies')">Study help</div><div class="chip" onclick="quickAsk('What can you do?')">What can you do?</div></div></div>`;
+    history.length = 1;
+  }
+
+  // Markdown
   function renderMarkdown(text) {
     return text
-      .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
+      .replace(/```[\w]*\n?([\s\S]*?)```/g, (_, c) => `<pre><code>${c.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
       .replace(/`([^`]+)`/g, '<code>$1</code>')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.+?)\*/g, '<em>$1</em>')
@@ -217,80 +203,69 @@
       .replace(/\n/g, '<br>');
   }
 
-  // ── TTS ──
-  let ttsBtn = null;
+  // TTS
+  let activeTtsBtn = null;
   function speak(text, btn) {
-    if (ttsBtn) { window.speechSynthesis.cancel(); ttsBtn.textContent = '🔊'; ttsBtn = null; return; }
+    if (activeTtsBtn) { window.speechSynthesis.cancel(); activeTtsBtn.textContent = '🔊'; activeTtsBtn = null; return; }
     const utt = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g, ''));
-    btn.textContent = '⏹️'; ttsBtn = btn;
-    utt.onend = () => { btn.textContent = '🔊'; ttsBtn = null; };
+    btn.textContent = '⏹️'; activeTtsBtn = btn;
+    utt.onend = () => { btn.textContent = '🔊'; activeTtsBtn = null; };
     window.speechSynthesis.speak(utt);
   }
 
-  // ── Copy ──
+  // Copy
   function copyText(text) {
-    navigator.clipboard.writeText(text.replace(/<[^>]+>/g, '')).then(() => { alert('Copied!'); });
+    navigator.clipboard.writeText(text.replace(/<[^>]+>/g, '')).then(() => alert('Copied!'));
   }
 
-  // ── Clear ──
-  const API_KEY = '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';
-  const history = [{ role: 'system', content: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful at all times. Keep responses concise and easy to understand.' }];
-
-  function clearChat() {
-    document.getElementById('messages').innerHTML = `
-      <div class="welcome">
-        <div class="icon">⚡</div>
-        <h2>Welcome to Volta!</h2>
-        <p>I'm your smart AI assistant. Ask me anything — from general knowledge to writing, coding, math, and more!</p>
-        <div class="chips">
-          <div class="chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</div>
-          <div class="chip" onclick="quickAsk('Write a short poem')">Write a poem</div>
-          <div class="chip" onclick="quickAsk('Help me with my studies')">Study help</div>
-          <div class="chip" onclick="quickAsk('What can you do?')">What can you do?</div>
-        </div>
-      </div>`;
-    history.length = 1;
-  }
-
-  // ── Messages ──
-  const messagesEl = document.getElementById('messages');
-  const inputEl = document.getElementById('user-input');
-  const sendBtn = document.getElementById('send-btn');
-
+  // Add message
   function addMessage(role, text) {
-    const wrap = document.createElement('div'); wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
-    const av = document.createElement('div'); av.className = 'avatar ' + (role === 'user' ? 'user-av' : 'bot-av');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+    const av = document.createElement('div');
+    av.className = 'avatar ' + (role === 'user' ? 'user-av' : 'bot-av');
     av.textContent = role === 'user' ? 'You' : 'V';
-    const msgWrap = document.createElement('div'); msgWrap.className = 'msg-wrap';
-    const bubble = document.createElement('div'); bubble.className = 'bubble';
-    if (role === 'bot') { bubble.innerHTML = renderMarkdown(text); }
-    else { bubble.textContent = text; }
+    const msgWrap = document.createElement('div');
+    msgWrap.className = 'msg-wrap';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    if (role === 'bot') bubble.innerHTML = renderMarkdown(text);
+    else bubble.textContent = text;
     msgWrap.appendChild(bubble);
     if (role === 'bot') {
-      const actions = document.createElement('div'); actions.className = 'msg-actions';
-      const cpBtn = document.createElement('button'); cpBtn.className = 'msg-action-btn'; cpBtn.textContent = '📋 Copy';
+      const actions = document.createElement('div');
+      actions.className = 'msg-actions';
+      const cpBtn = document.createElement('button');
+      cpBtn.className = 'msg-action-btn'; cpBtn.textContent = '📋 Copy';
       cpBtn.onclick = () => copyText(text);
-      const spBtn = document.createElement('button'); spBtn.className = 'msg-action-btn'; spBtn.textContent = '🔊';
+      const spBtn = document.createElement('button');
+      spBtn.className = 'msg-action-btn'; spBtn.textContent = '🔊';
       spBtn.onclick = () => speak(text, spBtn);
-      actions.appendChild(cpBtn); actions.appendChild(spBtn);
+      actions.appendChild(cpBtn);
+      actions.appendChild(spBtn);
       msgWrap.appendChild(actions);
-      const reactions = document.createElement('div'); reactions.className = 'emoji-reactions';
+      const reactions = document.createElement('div');
+      reactions.className = 'emoji-reactions';
       ['👍','❤️','😂','🤔','🔥'].forEach(e => {
-        const r = document.createElement('span'); r.className = 'reaction'; r.textContent = e;
+        const r = document.createElement('span');
+        r.className = 'reaction'; r.textContent = e;
         r.onclick = () => r.classList.toggle('active');
         reactions.appendChild(r);
       });
       msgWrap.appendChild(reactions);
     }
-    wrap.appendChild(av); wrap.appendChild(msgWrap);
+    wrap.appendChild(av);
+    wrap.appendChild(msgWrap);
     messagesEl.appendChild(wrap);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
   function showTyping() {
-    const wrap = document.createElement('div'); wrap.className = 'msg bot'; wrap.id = 'typing';
+    const wrap = document.createElement('div');
+    wrap.className = 'msg bot'; wrap.id = 'typing';
     wrap.innerHTML = '<div class="avatar bot-av">V</div><div class="bubble typing-dots"><span></span><span></span><span></span></div>';
-    messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight;
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
   }
   function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
@@ -315,7 +290,8 @@
       removeTyping();
       addMessage('bot', 'Oops! Something went wrong: ' + e.message);
     }
-    sendBtn.disabled = false; inputEl.focus();
+    sendBtn.disabled = false;
+    inputEl.focus();
   }
 
   function quickAsk(text) { sendMessage(text); }
