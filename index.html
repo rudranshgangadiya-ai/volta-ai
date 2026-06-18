@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0051)file:///C:/Users/integrated/Downloads/volta-ai.html -->
+<!-- saved from url=(0053)file:///C:/Users/integrated/Downloads/volta-ai_1.html -->
 <html lang="en" data-theme="blue"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Volta AI</title>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./index_files/css2" rel="stylesheet">
+
 <style>
 :root {
   --p: #2563eb; --pd: #1d4ed8; --pl: #dbeafe;
@@ -591,27 +590,30 @@ body {
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
 // INTRO
 const introLines = ["Hey! 👋 Welcome to Volta AI", "Built by Rushang ⚡"];
 const introEl = document.getElementById('intro-typed');
 const subEl = document.getElementById('intro-sub');
 const overlay = document.getElementById('intro-overlay');
-const cur = document.createElement('span'); cur.className = 'cursor'; introEl.appendChild(cur);
-let ci = 0, li = 0;
-function typeNext() {
-  const line = introLines[li];
-  if (ci < line.length) { cur.insertAdjacentText('beforebegin', line[ci]); ci++; setTimeout(typeNext, 52); }
-  else if (li < introLines.length - 1) {
-    li++; ci = 0;
-    setTimeout(() => { cur.insertAdjacentElement('beforebegin', document.createElement('br')); setTimeout(typeNext, 40); }, 600);
-  } else {
-    setTimeout(() => {
-      subEl.style.transition = 'opacity 0.6s'; subEl.style.opacity = '1';
-      setTimeout(() => { overlay.classList.add('fade-out'); setTimeout(() => overlay.remove(), 700); }, 1600);
-    }, 400);
+if (introEl) {
+  const cur = document.createElement('span'); cur.className = 'cursor'; introEl.appendChild(cur);
+  let ci = 0, li = 0;
+  function typeNext() {
+    const line = introLines[li];
+    if (ci < line.length) { cur.insertAdjacentText('beforebegin', line[ci]); ci++; setTimeout(typeNext, 52); }
+    else if (li < introLines.length - 1) {
+      li++; ci = 0;
+      setTimeout(() => { cur.insertAdjacentElement('beforebegin', document.createElement('br')); setTimeout(typeNext, 40); }, 600);
+    } else {
+      setTimeout(() => {
+        if (subEl) { subEl.style.transition = 'opacity 0.6s'; subEl.style.opacity = '1'; }
+        setTimeout(() => { if (overlay) { overlay.classList.add('fade-out'); setTimeout(() => overlay.remove(), 700); } }, 1600);
+      }, 400);
+    }
   }
+  setTimeout(typeNext, 500);
 }
-setTimeout(typeNext, 500);
 
 // THEME
 function setTheme(t) {
@@ -779,6 +781,8 @@ inputEl.addEventListener('input', () => {
   inputEl.style.height = 'auto';
   inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
 });
+
+}); // end DOMContentLoaded
 </script>
 
 
