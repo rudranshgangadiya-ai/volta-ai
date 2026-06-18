@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/integrated/Downloads/volta-ai_3.html -->
+<!-- saved from url=(0059)file:///C:/Users/integrated/Downloads/volta-ai-updated.html -->
 <html lang="en" data-theme="blue"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Volta AI</title>
-
 <style>
 :root {
   --p: #2563eb; --pd: #1d4ed8; --pl: #dbeafe;
@@ -76,6 +75,7 @@ body {
   flex-shrink: 0;
   transition: transform 0.3s ease, background 0.3s;
   z-index: 50;
+  overflow-y: auto;
 }
 .sidebar-logo {
   padding: 20px 18px 16px;
@@ -132,6 +132,30 @@ body {
   font-family: inherit;
 }
 .quick-chip:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+
+/* CHAT HISTORY in sidebar */
+.history-list { padding: 0 12px; display: flex; flex-direction: column; gap: 3px; max-height: 200px; overflow-y: auto; }
+.history-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: left;
+  font-family: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.history-item:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.history-item .hi-icon { font-size: 12px; flex-shrink: 0; }
+.history-empty { font-size: 12px; color: var(--text3); padding: 6px 12px; font-style: italic; }
 
 .sidebar-bottom {
   margin-top: auto;
@@ -299,6 +323,23 @@ body {
 .bubble ul, .bubble ol { padding-left: 18px; margin: 4px 0; }
 .bubble li { margin: 2px 0; }
 
+/* File preview bubble */
+.file-bubble {
+  background: var(--bot-bubble);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.file-bubble-icon { font-size: 24px; }
+.file-bubble-name { font-weight: 500; color: var(--text); font-size: 13px; }
+.file-bubble-size { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
 /* MSG ACTIONS */
 .msg-actions {
   display: flex; gap: 5px; margin-top: 5px;
@@ -384,6 +425,26 @@ body {
   line-height: 1.5;
 }
 #user-input::placeholder { color: var(--text3); }
+
+/* Input toolbar buttons */
+.input-tool-btn {
+  width: 36px; height: 36px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text2);
+  transition: all 0.15s;
+  flex-shrink: 0;
+  font-size: 16px;
+  position: relative;
+}
+.input-tool-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.input-tool-btn.active { background: var(--pl); color: var(--p); border-color: var(--p); }
+.input-tool-btn.recording { background: #fee2e2; color: #dc2626; border-color: #dc2626; animation: recPulse 1s ease-in-out infinite; }
+@keyframes recPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
 #send-btn {
   width: 38px; height: 38px;
   background: var(--p);
@@ -398,7 +459,58 @@ body {
 #send-btn:active { transform: scale(0.93); }
 #send-btn:disabled { background: var(--text3); cursor: not-allowed; }
 #send-btn svg { width: 18px; height: 18px; fill: white; }
+
+/* File upload preview strip */
+#file-preview-strip {
+  display: none;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.file-chip {
+  background: var(--pl);
+  border: 1px solid var(--p);
+  border-radius: 20px;
+  padding: 4px 10px 4px 8px;
+  font-size: 12px;
+  color: var(--p);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+}
+.file-chip-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--p);
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  font-family: inherit;
+}
+
 .footer-note { text-align: center; font-size: 11px; color: var(--text3); margin-top: 8px; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text);
+  color: var(--surface);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* MODALS */
 .modal-overlay {
@@ -441,6 +553,70 @@ body {
   transition: background 0.2s;
 }
 .modal-close:hover { background: var(--pd); }
+
+/* YOUTUBE SUMMARIZER MODAL */
+#yt-modal .modal { width: 380px; max-width: 95vw; }
+.yt-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.yt-input-row input {
+  flex: 1; border: 1.5px solid var(--border2); border-radius: 10px;
+  padding: 9px 12px; font-size: 13px; font-family: inherit;
+  color: var(--text); background: var(--surface2); outline: none;
+}
+.yt-input-row input:focus { border-color: var(--p); }
+.yt-btn {
+  background: #ff0000; color: white; border: none;
+  border-radius: 10px; padding: 9px 14px; font-size: 13px;
+  font-weight: 600; font-family: inherit; cursor: pointer;
+  transition: background 0.2s; white-space: nowrap;
+}
+.yt-btn:hover { background: #cc0000; }
+.yt-btn:disabled { background: var(--text3); cursor: not-allowed; }
+#yt-result {
+  display: none;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+#yt-result::-webkit-scrollbar { width: 4px; }
+#yt-result::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+.yt-video-info {
+  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.yt-thumb { width: 80px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.yt-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.yt-channel { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.yt-summary-text { font-size: 13px; color: var(--text); line-height: 1.7; }
+.yt-loading { text-align: center; padding: 20px; color: var(--text2); font-size: 13px; display: none; }
+.yt-loading-dots { display: inline-flex; gap: 5px; margin-left: 6px; }
+.yt-loading-dots span { width: 6px; height: 6px; background: #ff0000; border-radius: 50%; animation: bounce 1.3s ease-in-out infinite; }
+.yt-loading-dots span:nth-child(2) { animation-delay: 0.18s; }
+.yt-loading-dots span:nth-child(3) { animation-delay: 0.36s; }
+.yt-actions { display: flex; gap: 8px; }
+.yt-action-btn {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 9px; font-size: 13px; font-family: inherit;
+  color: var(--text2); cursor: pointer; transition: all 0.15s; display: none;
+}
+.yt-action-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.yt-error { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 10px; padding: 12px; font-size: 13px; color: #dc2626; display: none; margin-bottom: 10px; }
+
+/* WEB SEARCH indicator */
+.search-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--pl); color: var(--p);
+  border: 1px solid var(--p);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.search-badge svg { width: 11px; height: 11px; }
 
 /* INTRO */
 #intro-overlay {
@@ -520,19 +696,10 @@ body {
   color: var(--text2); cursor: pointer; transition: all 0.15s; display: none;
 }
 .img-dl-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
-/* image bubble in chat */
 .img-bubble { background: var(--bot-bubble); border: 1px solid var(--border); border-radius: 18px; border-bottom-left-radius: 5px; overflow: hidden; box-shadow: var(--shadow-sm); max-width: 280px; }
 .img-bubble img { width: 100%; display: block; cursor: pointer; transition: opacity 0.2s; }
 .img-bubble img:hover { opacity: 0.92; }
 .img-bubble-caption { padding: 8px 12px; font-size: 12px; color: var(--text2); }
-/* image btn in input */
-#img-trigger-btn {
-  width: 36px; height: 36px; background: var(--surface2);
-  border: 1px solid var(--border2); border-radius: 9px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: var(--text2); transition: all 0.15s; flex-shrink: 0; font-size: 18px;
-}
-#img-trigger-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
 
 /* MOBILE */
 @media (max-width: 640px) {
@@ -549,13 +716,22 @@ body {
   .msg-wrap { max-width: 85%; }
   .input-area { padding: 10px 12px 14px; }
   .topbar { padding: 0 12px; }
+  #yt-modal .modal { width: 95vw; }
 }
 </style>
 </head>
 <body>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- INTRO -->
 
 
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- THEME MODAL -->
 <div id="theme-modal" class="modal-overlay">
   <div class="modal">
     <h3>Choose a theme</h3>
@@ -570,6 +746,7 @@ body {
   </div>
 </div>
 
+<!-- IMAGE GENERATOR MODAL -->
 <div id="img-modal" class="modal-overlay">
   <div class="modal">
     <h3>🎨 Generate an image</h3>
@@ -593,8 +770,34 @@ body {
   </div>
 </div>
 
+<!-- YOUTUBE SUMMARIZER MODAL -->
+<div id="yt-modal" class="modal-overlay">
+  <div class="modal">
+    <h3>▶️ YouTube Summarizer</h3>
+    <div class="yt-input-row">
+      <input id="yt-url" type="text" placeholder="Paste YouTube URL here...">
+      <button class="yt-btn" id="yt-sum-btn" onclick="summarizeYoutube()">Summarize</button>
+    </div>
+    <div class="yt-error" id="yt-error"></div>
+    <div class="yt-loading" id="yt-loading">
+      Fetching transcript &amp; summarizing<div class="yt-loading-dots"><span></span><span></span><span></span></div>
+    </div>
+    <div id="yt-result">
+      <div class="yt-video-info" id="yt-video-info"></div>
+      <div class="yt-summary-text" id="yt-summary-text"></div>
+    </div>
+    <div class="yt-actions">
+      <button class="yt-action-btn" id="yt-copy-btn" onclick="copyYtSummary()">📋 Copy summary</button>
+      <button class="yt-action-btn" id="yt-chat-btn" onclick="sendYtSummaryToChat()">💬 Send to chat</button>
+    </div>
+    <button class="modal-close" onclick="closeModal(&#39;yt-modal&#39;)" style="margin-top:12px">Close</button>
+  </div>
+</div>
 
+<!-- HIDDEN FILE INPUT -->
+<input type="file" id="file-input" style="display:none" multiple="" accept="image/*,.pdf,.txt,.md,.csv,.json,.js,.py,.html,.css" onchange="handleFileSelect(event)">
 
+<!-- LAYOUT -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">V</div>
@@ -609,6 +812,10 @@ body {
     New chat
   </button>
 
+  <!-- CHAT HISTORY -->
+  <div class="sidebar-section">Recent chats</div>
+  <div class="history-list" id="history-list"><div class="history-empty" id="history-empty">No chats yet</div></div>
+
   <div class="sidebar-section">Try asking</div>
   <div class="quick-chips">
     <button class="quick-chip" onclick="quickAsk(&#39;Tell me a fun fact&#39;)">💡 Tell me a fun fact</button>
@@ -617,6 +824,8 @@ body {
     <button class="quick-chip" onclick="quickAsk(&#39;Explain how AI works&#39;)">🤖 How does AI work?</button>
     <button class="quick-chip" onclick="quickAsk(&#39;Give me a coding tip&#39;)">💻 Coding tip</button>
     <button class="quick-chip" onclick="openImgModal()">🎨 Generate an image</button>
+    <button class="quick-chip" onclick="openYtModal()">▶️ Summarize a YouTube video</button>
+    <button class="quick-chip" onclick="toggleWebSearch()">🔍 Toggle web search</button>
   </div>
 
   <div class="sidebar-bottom">
@@ -627,6 +836,10 @@ body {
     <button class="sidebar-btn" onclick="toggleDark()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
       Dark mode
+    </button>
+    <button class="sidebar-btn" onclick="clearAllHistory()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6M9 6V4h6v2"></path></svg>
+      Clear history
     </button>
     <div class="dev-tag">⚡ Developed by Rushang</div>
   </div>
@@ -639,8 +852,12 @@ body {
     </button>
     <span class="topbar-title">Volta AI</span>
     <div class="topbar-status"><div class="status-dot"></div>Online</div>
-    <button class="topbar-btn" onclick="clearChat()" title="Clear chat" style="margin-left:6px">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+    <!-- Web search toggle in topbar -->
+    <button class="topbar-btn" id="topbar-search-btn" onclick="toggleWebSearch()" title="Toggle web search" style="font-size:14px">🔍</button>
+    <!-- YouTube button in topbar -->
+    <button class="topbar-btn" onclick="openYtModal()" title="YouTube Summarizer" style="font-size:14px">▶️</button>
+    <button class="topbar-btn" onclick="clearChat()" title="Clear chat" style="margin-left:2px">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6M9 6V4h6v2"></path></svg>
     </button>
   </div>
 
@@ -648,31 +865,39 @@ body {
     <div class="welcome-card">
       <div class="welcome-icon">⚡</div>
       <h2>Welcome to Volta!</h2>
-      <p>I'm your smart AI assistant, ready to help with anything — writing, coding, math, learning, and more.</p>
+      <p>I'm your smart AI assistant — now with YouTube summaries, web search, voice input, and file uploads!</p>
       <div class="welcome-chips">
         <button class="welcome-chip" onclick="quickAsk(&#39;Tell me a fun fact&#39;)">Fun fact</button>
         <button class="welcome-chip" onclick="quickAsk(&#39;Write a short poem&#39;)">Write a poem</button>
-        <button class="welcome-chip" onclick="quickAsk(&#39;Help me with my studies&#39;)">Study help</button>
+        <button class="welcome-chip" onclick="openYtModal()">▶️ Summarize YouTube</button>
         <button class="welcome-chip" onclick="quickAsk(&#39;What can you do?&#39;)">What can you do?</button>
       </div>
     </div>
   </div>
 
   <div class="input-area">
+    <!-- File preview strip -->
+    <div id="file-preview-strip"></div>
     <div class="input-box">
-      <textarea id="user-input" placeholder="Ask Volta anything... or type &#39;generate image of ...&#39;" rows="1" autocomplete="off"></textarea>
-      <button id="img-trigger-btn" onclick="openImgModal()" title="Generate image">🎨</button>
+      <textarea id="user-input" placeholder="Ask Volta anything... or paste a YouTube link!" rows="1" autocomplete="off"></textarea>
+      <!-- Voice input button -->
+      <button class="input-tool-btn" id="voice-btn" onclick="toggleVoice()" title="Voice input">🎤</button>
+      <!-- File upload button -->
+      <button class="input-tool-btn" id="file-btn" onclick="document.getElementById(&#39;file-input&#39;).click()" title="Attach file or image">📎</button>
+      <!-- Image generator button -->
+      <button class="input-tool-btn" id="img-trigger-btn" onclick="openImgModal()" title="Generate image">🎨</button>
       <button id="send-btn" aria-label="Send">
         <svg viewBox="0 0 24 24"><path d="M2 12L22 2L15 22L11 13L2 12Z"></path></svg>
       </button>
     </div>
-    <div class="footer-note">Powered by Llama AI · Volta by Rushang</div>
+    <div class="footer-note" id="footer-note">Powered by Llama AI · Volta by Rushang · 🔍 Web search <span id="ws-status">OFF</span></div>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-// INTRO
+
+// ─── INTRO ────────────────────────────────────────────────────────────────────
 const introLines = ["Hey! 👋 Welcome to Volta AI", "Built by Rushang ⚡"];
 const introEl = document.getElementById('intro-typed');
 const subEl = document.getElementById('intro-sub');
@@ -696,7 +921,14 @@ if (introEl) {
   setTimeout(typeNext, 500);
 }
 
-// THEME — exposed globally so onclick="setTheme(...)" works
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg, dur = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ─── THEME ────────────────────────────────────────────────────────────────────
 window.setTheme = function(t) {
   document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem('volta-theme', t);
@@ -714,7 +946,7 @@ window.closeModal = function(id) { document.getElementById(id).classList.remove(
 const saved = localStorage.getItem('volta-theme');
 if (saved) window.setTheme(saved);
 
-// SIDEBAR
+// ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 window.toggleSidebar = function() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('open');
@@ -724,15 +956,396 @@ window.closeSidebar = function() {
   document.getElementById('sidebar-overlay').classList.remove('open');
 };
 
-// CLEAR
-window.clearChat = function() {
+// ─── CHAT HISTORY (localStorage) ──────────────────────────────────────────────
+const HISTORY_KEY = 'volta-chat-history';
+let savedSessions = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+
+function saveCurrentSession(messages) {
+  if (!messages || messages.length < 2) return; // skip empty
+  const firstUser = messages.find(m => m.role === 'user');
+  if (!firstUser) return;
+  const label = firstUser.content.slice(0, 60);
+  const session = { id: Date.now(), label, messages, ts: Date.now() };
+  savedSessions.unshift(session);
+  if (savedSessions.length > 20) savedSessions = savedSessions.slice(0, 20);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(savedSessions));
+  renderHistoryList();
+}
+
+function renderHistoryList() {
+  const list = document.getElementById('history-list');
+  const empty = document.getElementById('history-empty');
+  if (savedSessions.length === 0) {
+    list.innerHTML = '<div class="history-empty" id="history-empty">No chats yet</div>';
+    return;
+  }
+  list.innerHTML = savedSessions.map((s, i) => `
+    <button class="history-item" onclick="loadSession(${i})" title="${s.label}">
+      <span class="hi-icon">💬</span>${s.label}
+    </button>
+  `).join('');
+}
+
+window.loadSession = function(i) {
+  const session = savedSessions[i];
+  if (!session) return;
+  // Save current session first
+  if (history.filter(m => m.role !== 'system').length > 0) saveCurrentSession(history.slice(1));
+  // Load old session into history array
+  history.length = 1; // keep system prompt
+  session.messages.forEach(m => history.push(m));
+  // Re-render messages
   const msgs = document.getElementById('messages');
-  msgs.innerHTML = `<div class="welcome-card"><div class="welcome-icon">⚡</div><h2>Welcome to Volta!</h2><p>I'm your smart AI assistant, ready to help with anything — writing, coding, math, learning, and more.</p><div class="welcome-chips"><button class="welcome-chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</button><button class="welcome-chip" onclick="quickAsk('Write a short poem')">Write a poem</button><button class="welcome-chip" onclick="quickAsk('Help me with my studies')">Study help</button><button class="welcome-chip" onclick="quickAsk('What can you do?')">What can you do?</button></div></div>`;
+  msgs.innerHTML = '';
+  session.messages.forEach(m => {
+    if (m.role === 'user') addMessage('user', m.content);
+    else if (m.role === 'assistant') addMessage('bot', m.content);
+  });
+  closeSidebar();
+  showToast('📂 Session loaded');
+};
+
+window.clearAllHistory = function() {
+  savedSessions = [];
+  localStorage.removeItem(HISTORY_KEY);
+  renderHistoryList();
+  showToast('🗑️ History cleared');
+};
+
+renderHistoryList();
+
+// ─── CLEAR CHAT ───────────────────────────────────────────────────────────────
+window.clearChat = function() {
+  // Save before clearing
+  if (history.filter(m => m.role !== 'system').length > 0) saveCurrentSession(history.slice(1));
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = `<div class="welcome-card"><div class="welcome-icon">⚡</div><h2>Welcome to Volta!</h2><p>I'm your smart AI assistant — now with YouTube summaries, web search, voice input, and file uploads!</p><div class="welcome-chips"><button class="welcome-chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</button><button class="welcome-chip" onclick="quickAsk('Write a short poem')">Write a poem</button><button class="welcome-chip" onclick="openYtModal()">▶️ Summarize YouTube</button><button class="welcome-chip" onclick="quickAsk('What can you do?')">What can you do?</button></div></div>`;
   history.length = 1;
+  pendingFiles = [];
+  renderFileStrip();
   window.closeSidebar();
 };
 
-// MARKDOWN
+// ─── WEB SEARCH ───────────────────────────────────────────────────────────────
+let webSearchEnabled = false;
+window.toggleWebSearch = function() {
+  webSearchEnabled = !webSearchEnabled;
+  document.getElementById('ws-status').textContent = webSearchEnabled ? 'ON' : 'OFF';
+  document.getElementById('ws-status').style.color = webSearchEnabled ? '#22c55e' : 'inherit';
+  const btn = document.getElementById('topbar-search-btn');
+  btn.style.background = webSearchEnabled ? 'var(--pl)' : '';
+  btn.style.borderColor = webSearchEnabled ? 'var(--p)' : '';
+  showToast(webSearchEnabled ? '🔍 Web search ON — Volta will search the web for answers' : '🔍 Web search OFF');
+};
+
+async function doWebSearch(query) {
+  try {
+    // Use DuckDuckGo Instant Answer API (free, no key)
+    const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_redirect=1&no_html=1&skip_disambig=1`;
+    const res = await fetch(url);
+    const data = await res.json();
+    let results = '';
+    if (data.AbstractText) results += `Summary: ${data.AbstractText}\n`;
+    if (data.Answer) results += `Answer: ${data.Answer}\n`;
+    if (data.RelatedTopics && data.RelatedTopics.length > 0) {
+      const topics = data.RelatedTopics.slice(0, 4).filter(t => t.Text).map(t => `- ${t.Text}`).join('\n');
+      if (topics) results += `Related:\n${topics}\n`;
+    }
+    if (!results) {
+      // Fallback: try Wikipedia summary
+      const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.split(' ').slice(0,3).join('_'))}`);
+      if (wikiRes.ok) {
+        const wikiData = await wikiRes.json();
+        if (wikiData.extract) results = `Wikipedia: ${wikiData.extract.slice(0, 600)}`;
+      }
+    }
+    return results || null;
+  } catch(e) { return null; }
+}
+
+// ─── VOICE INPUT ──────────────────────────────────────────────────────────────
+let recognition = null;
+let isRecording = false;
+
+window.toggleVoice = function() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('❌ Voice not supported in this browser. Try Chrome!');
+    return;
+  }
+  if (isRecording) {
+    recognition.stop();
+    return;
+  }
+  const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SRClass();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    isRecording = true;
+    document.getElementById('voice-btn').classList.add('recording');
+    document.getElementById('voice-btn').textContent = '⏹';
+    showToast('🎤 Listening... speak now');
+  };
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    document.getElementById('user-input').value = final || interim;
+    autoResizeInput();
+  };
+  recognition.onend = () => {
+    isRecording = false;
+    document.getElementById('voice-btn').classList.remove('recording');
+    document.getElementById('voice-btn').textContent = '🎤';
+    const val = document.getElementById('user-input').value.trim();
+    if (val) showToast('✅ Voice captured! Press send or edit.');
+  };
+  recognition.onerror = (e) => {
+    isRecording = false;
+    document.getElementById('voice-btn').classList.remove('recording');
+    document.getElementById('voice-btn').textContent = '🎤';
+    showToast('❌ Voice error: ' + e.error);
+  };
+  recognition.start();
+};
+
+// ─── FILE UPLOAD ──────────────────────────────────────────────────────────────
+let pendingFiles = [];
+
+window.handleFileSelect = function(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(f => {
+    if (pendingFiles.length >= 5) { showToast('Max 5 files at once'); return; }
+    pendingFiles.push(f);
+  });
+  e.target.value = '';
+  renderFileStrip();
+};
+
+function renderFileStrip() {
+  const strip = document.getElementById('file-preview-strip');
+  if (pendingFiles.length === 0) { strip.style.display = 'none'; strip.innerHTML = ''; return; }
+  strip.style.display = 'flex';
+  strip.innerHTML = pendingFiles.map((f, i) => `
+    <div class="file-chip">
+      ${getFileIcon(f)} ${f.name.length > 20 ? f.name.slice(0,18)+'…' : f.name}
+      <button class="file-chip-remove" onclick="removeFile(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+window.removeFile = function(i) {
+  pendingFiles.splice(i, 1);
+  renderFileStrip();
+};
+
+function getFileIcon(f) {
+  if (f.type.startsWith('image/')) return '🖼️';
+  if (f.type === 'application/pdf') return '📄';
+  if (f.name.endsWith('.py')) return '🐍';
+  if (f.name.endsWith('.js')) return '🟨';
+  if (f.name.endsWith('.html') || f.name.endsWith('.css')) return '🌐';
+  return '📎';
+}
+
+async function readFilesAsText(files) {
+  const results = [];
+  for (const f of files) {
+    try {
+      if (f.type.startsWith('image/')) {
+        const b64 = await fileToBase64(f);
+        results.push({ name: f.name, type: 'image', b64, mimeType: f.type });
+      } else {
+        const text = await f.text();
+        results.push({ name: f.name, type: 'text', content: text.slice(0, 8000) });
+      }
+    } catch(e) { results.push({ name: f.name, type: 'error' }); }
+  }
+  return results;
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ─── YOUTUBE SUMMARIZER ───────────────────────────────────────────────────────
+window.openYtModal = function() {
+  document.getElementById('yt-modal').classList.add('open');
+  document.getElementById('yt-url').focus();
+  closeSidebar();
+};
+
+function extractVideoId(url) {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
+    /youtube\.com\/shorts\/([^&\n?#]+)/
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+let ytSummaryText = '';
+let ytVideoTitle = '';
+
+window.summarizeYoutube = async function() {
+  const url = document.getElementById('yt-url').value.trim();
+  const videoId = extractVideoId(url);
+
+  const errEl = document.getElementById('yt-error');
+  const loadEl = document.getElementById('yt-loading');
+  const resultEl = document.getElementById('yt-result');
+  const copyBtn = document.getElementById('yt-copy-btn');
+  const chatBtn = document.getElementById('yt-chat-btn');
+  const sumBtn = document.getElementById('yt-sum-btn');
+
+  errEl.style.display = 'none';
+  resultEl.style.display = 'none';
+  copyBtn.style.display = 'none';
+  chatBtn.style.display = 'none';
+  ytSummaryText = '';
+
+  if (!videoId) {
+    errEl.textContent = '❌ Please paste a valid YouTube URL (e.g. https://youtube.com/watch?v=...)';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  sumBtn.disabled = true;
+  loadEl.style.display = 'block';
+
+  try {
+    // Step 1: Get video metadata from YouTube oEmbed (free, no API key)
+    let title = 'YouTube Video';
+    let channelName = '';
+    let thumbUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+
+    try {
+      const oembedRes = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+      if (oembedRes.ok) {
+        const oembed = await oembedRes.json();
+        title = oembed.title || title;
+        channelName = oembed.author_name || '';
+      }
+    } catch(e) {}
+
+    ytVideoTitle = title;
+
+    // Step 2: Fetch transcript via a free proxy/API
+    // We use the youtubetranscript.com API approach via a CORS-friendly method
+    // Fallback: use Groq to generate a summary based on title + description approach
+    let transcript = '';
+    let transcriptSource = '';
+
+    // Try fetching via the free supadata transcript endpoint
+    try {
+      const tRes = await fetch(`https://yt-transcript-api.vercel.app/transcript?videoId=${videoId}`);
+      if (tRes.ok) {
+        const tData = await tRes.json();
+        if (Array.isArray(tData) && tData.length > 0) {
+          transcript = tData.map(s => s.text).join(' ').slice(0, 10000);
+          transcriptSource = 'transcript';
+        }
+      }
+    } catch(e) {}
+
+    // Fallback: try another free endpoint
+    if (!transcript) {
+      try {
+        const tRes2 = await fetch(`https://api.kome.ai/api/tools/youtube-transcripts?video_id=${videoId}&format=true`);
+        if (tRes2.ok) {
+          const tData2 = await tRes2.json();
+          if (tData2.transcript) {
+            transcript = tData2.transcript.slice(0, 10000);
+            transcriptSource = 'transcript';
+          }
+        }
+      } catch(e) {}
+    }
+
+    // Build prompt for Groq
+    let promptContent = '';
+    if (transcript) {
+      promptContent = `Here is the transcript of a YouTube video titled "${title}" by ${channelName}:\n\n${transcript}\n\nPlease provide a comprehensive summary of this video with:\n1. Main topic (1 sentence)\n2. Key points (bullet list)\n3. Key takeaways (2-3 sentences)\n\nBe concise and informative.`;
+    } else {
+      // No transcript available — use video title to generate what the video is likely about
+      promptContent = `A YouTube video is titled: "${title}" by channel: "${channelName}".\n\nI couldn't fetch the transcript, but based on the title, please:\n1. Explain what this video is likely about\n2. List likely key points covered\n3. Suggest what viewers would learn\n\nMake it clear this is based on the video title, not the actual transcript.`;
+      transcriptSource = 'title-only';
+    }
+
+    // Step 3: Summarize with Groq
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: 'You are an expert at summarizing YouTube videos clearly and concisely.' },
+          { role: 'user', content: promptContent }
+        ],
+        max_tokens: 1024
+      })
+    });
+
+    const groqData = await groqRes.json();
+    const summary = groqData.choices?.[0]?.message?.content || 'Could not generate summary.';
+    ytSummaryText = summary;
+
+    // Render result
+    loadEl.style.display = 'none';
+    document.getElementById('yt-video-info').innerHTML = `
+      <img class="yt-thumb" src="${thumbUrl}" alt="thumbnail" onerror="this.style.display='none'">
+      <div>
+        <div class="yt-title">${title}</div>
+        ${channelName ? `<div class="yt-channel">by ${channelName}</div>` : ''}
+        ${transcriptSource === 'title-only' ? '<div class="yt-channel" style="color:#f59e0b;margin-top:4px">⚠️ No transcript found — summary based on title</div>' : '<div class="yt-channel" style="color:#22c55e;margin-top:4px">✅ Summarized from transcript</div>'}
+      </div>
+    `;
+    document.getElementById('yt-summary-text').innerHTML = renderMarkdown(summary);
+    resultEl.style.display = 'block';
+    copyBtn.style.display = 'block';
+    chatBtn.style.display = 'block';
+
+  } catch(e) {
+    loadEl.style.display = 'none';
+    errEl.textContent = '❌ Something went wrong: ' + e.message;
+    errEl.style.display = 'block';
+  }
+
+  sumBtn.disabled = false;
+};
+
+window.copyYtSummary = function() {
+  if (!ytSummaryText) return;
+  navigator.clipboard.writeText(`📺 ${ytVideoTitle}\n\n${ytSummaryText}`);
+  showToast('📋 Summary copied!');
+};
+
+window.sendYtSummaryToChat = function() {
+  if (!ytSummaryText) return;
+  closeModal('yt-modal');
+  const msg = `📺 **YouTube Summary: ${ytVideoTitle}**\n\n${ytSummaryText}`;
+  addMessage('bot', msg);
+  history.push({ role: 'assistant', content: msg });
+};
+
+// Auto-detect YouTube URLs pasted in chat
+function isYouTubeUrl(text) {
+  return /(?:youtube\.com\/watch|youtu\.be\/|youtube\.com\/shorts\/)/.test(text);
+}
+
+// ─── MARKDOWN ─────────────────────────────────────────────────────────────────
 function renderMarkdown(text) {
   return text
     .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`)
@@ -744,7 +1357,7 @@ function renderMarkdown(text) {
     .replace(/\n/g, '<br>');
 }
 
-// TTS
+// ─── TTS ──────────────────────────────────────────────────────────────────────
 let ttsActive = null;
 function speak(text, btn) {
   if (ttsActive) { window.speechSynthesis.cancel(); ttsActive.innerHTML = ttsIcon(); ttsActive = null; return; }
@@ -758,16 +1371,13 @@ function copyIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="curre
 
 function copyText(text) {
   navigator.clipboard.writeText(text.replace(/<[^>]+>/g,''));
+  showToast('📋 Copied!');
 }
 
-// MESSAGES
+// ─── ADD MESSAGE ──────────────────────────────────────────────────────────────
 const messagesEl = document.getElementById('messages');
-const inputEl = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-const API_KEY = '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';
-const history = [{ role: 'system', content: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful. Keep responses concise and easy to understand.' }];
 
-function addMessage(role, text) {
+function addMessage(role, text, searchUsed) {
   const wrap = document.createElement('div');
   wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
   const av = document.createElement('div');
@@ -775,6 +1385,15 @@ function addMessage(role, text) {
   av.textContent = role === 'user' ? 'U' : 'V';
   const msgWrap = document.createElement('div');
   msgWrap.className = 'msg-wrap';
+
+  // Web search badge
+  if (searchUsed) {
+    const badge = document.createElement('div');
+    badge.className = 'search-badge';
+    badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web searched`;
+    msgWrap.appendChild(badge);
+  }
+
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
   if (role === 'bot') bubble.innerHTML = renderMarkdown(text);
@@ -784,17 +1403,14 @@ function addMessage(role, text) {
   if (role === 'bot') {
     const actions = document.createElement('div');
     actions.className = 'msg-actions';
-
     const copyBtn = document.createElement('button');
     copyBtn.className = 'msg-action-btn';
     copyBtn.innerHTML = copyIcon() + ' Copy';
     copyBtn.onclick = () => { copyText(text); copyBtn.innerHTML = '✓ Copied'; setTimeout(() => { copyBtn.innerHTML = copyIcon() + ' Copy'; }, 1500); };
-
     const ttsBtn = document.createElement('button');
     ttsBtn.className = 'msg-action-btn';
     ttsBtn.innerHTML = ttsIcon();
     ttsBtn.onclick = () => speak(text, ttsBtn);
-
     actions.appendChild(copyBtn);
     actions.appendChild(ttsBtn);
     msgWrap.appendChild(actions);
@@ -825,14 +1441,79 @@ function showTyping() {
 }
 function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
 
+// ─── CORE VARIABLES ───────────────────────────────────────────────────────────
+const inputEl = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const API_KEY = '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';
+const history = [{ role: 'system', content: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful. Keep responses concise and easy to understand. When web search results are provided, use them to give up-to-date, accurate answers.' }];
+
+// ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
 async function sendMessage(text) {
-  if (!text.trim()) return;
+  text = text ? text.trim() : '';
+  const files = [...pendingFiles];
+  if (!text && files.length === 0) return;
+
+  // Auto-detect YouTube URLs
+  if (text && isYouTubeUrl(text) && files.length === 0) {
+    document.getElementById('yt-url').value = text;
+    inputEl.value = ''; inputEl.style.height = 'auto';
+    openYtModal();
+    summarizeYoutube();
+    return;
+  }
+
   inputEl.value = ''; inputEl.style.height = 'auto';
+  pendingFiles = []; renderFileStrip();
   sendBtn.disabled = true;
-  addMessage('user', text);
-  history.push({ role: 'user', content: text });
+
+  // Show user message
+  if (files.length > 0) {
+    files.forEach(f => {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg user'; wrap.style.animation = 'msgIn 0.25s ease';
+      const av = document.createElement('div');
+      av.className = 'avatar user-av'; av.textContent = 'U';
+      const mw = document.createElement('div'); mw.className = 'msg-wrap'; mw.style.alignItems = 'flex-end';
+      const fb = document.createElement('div'); fb.className = 'file-bubble';
+      fb.innerHTML = `<span class="file-bubble-icon">${getFileIcon(f)}</span><div><div class="file-bubble-name">${f.name}</div><div class="file-bubble-size">${(f.size/1024).toFixed(1)} KB</div></div>`;
+      mw.appendChild(fb); wrap.appendChild(av); wrap.appendChild(mw);
+      messagesEl.appendChild(wrap);
+    });
+  }
+  if (text) addMessage('user', text);
+  else addMessage('user', `📎 ${files.map(f=>f.name).join(', ')}`);
+
   showTyping();
+
   try {
+    // Build messages for API
+    let userContent = '';
+    let searchUsed = false;
+
+    // Web search
+    if (webSearchEnabled && text) {
+      const searchResults = await doWebSearch(text);
+      if (searchResults) {
+        searchUsed = true;
+        userContent += `[Web Search Results for "${text}"]:\n${searchResults}\n\n`;
+      }
+    }
+
+    // File content
+    if (files.length > 0) {
+      const fileData = await readFilesAsText(files);
+      fileData.forEach(fd => {
+        if (fd.type === 'text') userContent += `[File: ${fd.name}]\n${fd.content}\n\n`;
+        else if (fd.type === 'image') userContent += `[Image attached: ${fd.name} — describe and analyze this image if asked]\n`;
+      });
+    }
+
+    if (text) userContent += text;
+    else userContent += 'I have shared some file(s) above. Please help me with them.';
+
+    const msgPayload = [{ role: 'user', content: userContent }];
+    history.push({ role: 'user', content: userContent });
+
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
@@ -842,8 +1523,14 @@ async function sendMessage(text) {
     removeTyping();
     const reply = data.choices?.[0]?.message?.content || 'Sorry, I could not get a response.';
     history.push({ role: 'assistant', content: reply });
-    addMessage('bot', reply);
-  } catch (e) {
+    addMessage('bot', reply, searchUsed);
+
+    // Auto-save to history after every exchange
+    if (history.filter(m => m.role !== 'system').length >= 2) {
+      saveCurrentSession(history.slice(1));
+    }
+
+  } catch(e) {
     removeTyping();
     addMessage('bot', 'Oops! Something went wrong: ' + e.message);
   }
@@ -851,20 +1538,21 @@ async function sendMessage(text) {
   inputEl.focus();
 }
 
-window.quickAsk = (text) => sendMessage(text);
+window.quickAsk = function(text) { sendMessage(text); };
 window.sendMessage = sendMessage;
+
 sendBtn.addEventListener('click', () => sendMessage(inputEl.value.trim()));
 inputEl.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(inputEl.value.trim()); }
 });
 
-// Auto-resize textarea
-inputEl.addEventListener('input', () => {
+function autoResizeInput() {
   inputEl.style.height = 'auto';
   inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
-});
+}
+inputEl.addEventListener('input', autoResizeInput);
 
-// IMAGE GENERATOR
+// ─── IMAGE GENERATOR ──────────────────────────────────────────────────────────
 let lastImgUrl = '';
 let lastImgPrompt = '';
 
@@ -883,100 +1571,65 @@ window.generateImage = async function() {
   const loading = document.getElementById('img-loading');
   const dlBtn = document.getElementById('img-dl-btn');
   const sendBtn2 = document.getElementById('img-send-btn');
-
   genBtn.disabled = true; genBtn.textContent = '...';
-  placeholder.style.display = 'none';
-  preview.style.display = 'none';
-  loading.style.display = 'block';
-  dlBtn.style.display = 'none';
-  sendBtn2.style.display = 'none';
-
+  placeholder.style.display = 'none'; preview.style.display = 'none';
+  loading.style.display = 'block'; dlBtn.style.display = 'none'; sendBtn2.style.display = 'none';
   const seed = Math.floor(Math.random() * 999999);
   const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&nologo=true`;
-  lastImgUrl = url;
-  lastImgPrompt = prompt;
-
+  lastImgUrl = url; lastImgPrompt = prompt;
   const img = new Image();
-  img.onload = () => {
-    loading.style.display = 'none';
-    preview.src = url;
-    preview.style.display = 'block';
-    dlBtn.style.display = 'block';
-    sendBtn2.style.display = 'block';
-    genBtn.disabled = false; genBtn.textContent = 'Generate';
-  };
-  img.onerror = () => {
-    loading.style.display = 'none';
-    placeholder.style.display = 'flex';
-    placeholder.innerHTML = '<span>❌</span><div>Failed to generate. Try again!</div>';
-    genBtn.disabled = false; genBtn.textContent = 'Generate';
-  };
+  img.onload = () => { loading.style.display = 'none'; preview.src = url; preview.style.display = 'block'; dlBtn.style.display = 'block'; sendBtn2.style.display = 'block'; genBtn.disabled = false; genBtn.textContent = 'Generate'; };
+  img.onerror = () => { loading.style.display = 'none'; placeholder.style.display = 'flex'; placeholder.innerHTML = '<span>❌</span><div>Failed to generate. Try again!</div>'; genBtn.disabled = false; genBtn.textContent = 'Generate'; };
   img.src = url;
 };
 
 window.downloadImage = function() {
-  const a = document.createElement('a');
-  a.href = lastImgUrl;
-  a.download = 'volta-image.jpg';
-  a.target = '_blank';
-  a.click();
+  const a = document.createElement('a'); a.href = lastImgUrl; a.download = 'volta-image.jpg'; a.target = '_blank'; a.click();
 };
 
 window.sendImageToChat = function() {
-  const wrap = document.createElement('div');
-  wrap.className = 'msg bot';
-  wrap.style.animation = 'msgIn 0.25s ease';
-  const av = document.createElement('div');
-  av.className = 'avatar bot-av'; av.textContent = 'V';
-  const msgWrap = document.createElement('div');
-  msgWrap.className = 'msg-wrap';
-  const bubble = document.createElement('div');
-  bubble.className = 'img-bubble';
+  const wrap = document.createElement('div'); wrap.className = 'msg bot'; wrap.style.animation = 'msgIn 0.25s ease';
+  const av = document.createElement('div'); av.className = 'avatar bot-av'; av.textContent = 'V';
+  const msgWrap = document.createElement('div'); msgWrap.className = 'msg-wrap';
+  const bubble = document.createElement('div'); bubble.className = 'img-bubble';
   bubble.innerHTML = `<img src="${lastImgUrl}" alt="${lastImgPrompt}" onclick="window.open('${lastImgUrl}','_blank')" /><div class="img-bubble-caption">🎨 "${lastImgPrompt}"</div>`;
-  msgWrap.appendChild(bubble);
-  wrap.appendChild(av); wrap.appendChild(msgWrap);
-  messagesEl.appendChild(wrap);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+  msgWrap.appendChild(bubble); wrap.appendChild(av); wrap.appendChild(msgWrap);
+  messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight;
   closeModal('img-modal');
 };
 
-// Also support typing "generate image of X" directly in chat
+// Detect "generate image of X" in chat input
 const _origSend = window.sendMessage;
 window.sendMessage = async function(text) {
-  const imgMatch = text.match(/^(generate|create|make|draw|show)\s+(an?\s+)?image\s+(of\s+)?(.+)/i);
-  if (imgMatch) {
-    const prompt = imgMatch[4];
-    addMessage('user', text);
-    history.push({ role: 'user', content: text });
-    showTyping();
-    setTimeout(() => {
-      removeTyping();
-      const wrap = document.createElement('div');
-      wrap.className = 'msg bot'; wrap.style.animation = 'msgIn 0.25s ease';
-      const av = document.createElement('div');
-      av.className = 'avatar bot-av'; av.textContent = 'V';
-      const msgWrap = document.createElement('div');
-      msgWrap.className = 'msg-wrap';
-      const bubble = document.createElement('div');
-      bubble.className = 'img-bubble';
-      const seed = Math.floor(Math.random() * 999999);
-      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&nologo=true`;
-      bubble.innerHTML = `<img src="${url}" alt="${prompt}" onclick="window.open('${url}','_blank')" /><div class="img-bubble-caption">🎨 "${prompt}" — click to open full size</div>`;
-      msgWrap.appendChild(bubble);
-      wrap.appendChild(av); wrap.appendChild(msgWrap);
-      messagesEl.appendChild(wrap);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }, 800);
-    if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
-    if (sendBtn) sendBtn.disabled = false;
-    return;
+  if (text) {
+    const imgMatch = text.match(/^(generate|create|make|draw|show)\s+(an?\s+)?image\s+(of\s+)?(.+)/i);
+    if (imgMatch) {
+      const prompt = imgMatch[4];
+      addMessage('user', text);
+      history.push({ role: 'user', content: text });
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        const wrap = document.createElement('div'); wrap.className = 'msg bot'; wrap.style.animation = 'msgIn 0.25s ease';
+        const av = document.createElement('div'); av.className = 'avatar bot-av'; av.textContent = 'V';
+        const msgWrap = document.createElement('div'); msgWrap.className = 'msg-wrap';
+        const bubble = document.createElement('div'); bubble.className = 'img-bubble';
+        const seed = Math.floor(Math.random() * 999999);
+        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&nologo=true`;
+        bubble.innerHTML = `<img src="${url}" alt="${prompt}" onclick="window.open('${url}','_blank')" /><div class="img-bubble-caption">🎨 "${prompt}" — click to open full size</div>`;
+        msgWrap.appendChild(bubble); wrap.appendChild(av); wrap.appendChild(msgWrap);
+        messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight;
+      }, 800);
+      if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+      if (sendBtn) sendBtn.disabled = false;
+      return;
+    }
   }
   return _origSend(text);
 };
 
-document.getElementById('img-prompt').addEventListener('keydown', e => {
-  if (e.key === 'Enter') generateImage();
-});
+document.getElementById('img-prompt').addEventListener('keydown', e => { if (e.key === 'Enter') generateImage(); });
+document.getElementById('yt-url').addEventListener('keydown', e => { if (e.key === 'Enter') summarizeYoutube(); });
 
 }); // end DOMContentLoaded
 </script>
