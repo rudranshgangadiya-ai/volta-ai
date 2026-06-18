@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/integrated/Downloads/volta-ai_1.html -->
+<!-- saved from url=(0053)file:///C:/Users/integrated/Downloads/volta-ai_2.html -->
 <html lang="en" data-theme="blue"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -615,41 +615,41 @@ if (introEl) {
   setTimeout(typeNext, 500);
 }
 
-// THEME
-function setTheme(t) {
+// THEME — exposed globally so onclick="setTheme(...)" works
+window.setTheme = function(t) {
   document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem('volta-theme', t);
   document.querySelectorAll('.theme-opt').forEach(o => o.classList.remove('active'));
   document.querySelectorAll('.theme-opt').forEach(o => {
     if (o.textContent.trim().toLowerCase().startsWith(t === 'rose' ? 'r' : t === 'dark' ? 'd' : t[0])) o.classList.add('active');
   });
-}
-function toggleDark() {
+};
+window.toggleDark = function() {
   const c = document.documentElement.getAttribute('data-theme');
-  if (c === 'dark') setTheme(localStorage.getItem('volta-prev') || 'blue');
-  else { localStorage.setItem('volta-prev', c); setTheme('dark'); }
-}
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  if (c === 'dark') window.setTheme(localStorage.getItem('volta-prev') || 'blue');
+  else { localStorage.setItem('volta-prev', c); window.setTheme('dark'); }
+};
+window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 const saved = localStorage.getItem('volta-theme');
-if (saved) setTheme(saved);
+if (saved) window.setTheme(saved);
 
 // SIDEBAR
-function toggleSidebar() {
+window.toggleSidebar = function() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('open');
-}
-function closeSidebar() {
+};
+window.closeSidebar = function() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-overlay').classList.remove('open');
-}
+};
 
 // CLEAR
-function clearChat() {
+window.clearChat = function() {
   const msgs = document.getElementById('messages');
   msgs.innerHTML = `<div class="welcome-card"><div class="welcome-icon">⚡</div><h2>Welcome to Volta!</h2><p>I'm your smart AI assistant, ready to help with anything — writing, coding, math, learning, and more.</p><div class="welcome-chips"><button class="welcome-chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</button><button class="welcome-chip" onclick="quickAsk('Write a short poem')">Write a poem</button><button class="welcome-chip" onclick="quickAsk('Help me with my studies')">Study help</button><button class="welcome-chip" onclick="quickAsk('What can you do?')">What can you do?</button></div></div>`;
   history.length = 1;
-  closeSidebar();
-}
+  window.closeSidebar();
+};
 
 // MARKDOWN
 function renderMarkdown(text) {
@@ -771,6 +771,7 @@ async function sendMessage(text) {
 }
 
 window.quickAsk = (text) => sendMessage(text);
+window.sendMessage = sendMessage;
 sendBtn.addEventListener('click', () => sendMessage(inputEl.value.trim()));
 inputEl.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(inputEl.value.trim()); }
