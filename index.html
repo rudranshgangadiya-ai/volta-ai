@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)file:///C:/Users/integrated/Downloads/index.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Volta AI</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f6ff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-    /* SPLASH SCREEN */
     #splash {
       position: fixed; inset: 0; background: #1a6fd4;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -82,8 +81,15 @@
 </head>
 <body>
 
-  <!-- SPLASH SCREEN -->
-  
+  <div id="splash">
+    <div class="splash-bolt">⚡</div>
+    <div class="splash-title">Volta</div>
+    <div class="splash-sub">Your personal AI assistant</div>
+    <div class="splash-dev">Developed by Rushang</div>
+    <div class="splash-bar">
+      <div class="splash-bar-fill"></div>
+    </div>
+  </div>
 
   <header>
     <div class="logo">V</div>
@@ -100,10 +106,10 @@
       <h2>Hey! Welcome to Volta AI!</h2>
       <p>I'm your smart AI assistant developed by Rushang. Ask me anything — from general knowledge to writing, coding, math, and more!</p>
       <div class="chips">
-        <div class="chip" onclick="quickAsk(&#39;Tell me a fun fact&#39;)">Fun fact</div>
-        <div class="chip" onclick="quickAsk(&#39;Write a short poem&#39;)">Write a poem</div>
-        <div class="chip" onclick="quickAsk(&#39;Help me with my studies&#39;)">Study help</div>
-        <div class="chip" onclick="quickAsk(&#39;What can you do?&#39;)">What can you do?</div>
+        <div class="chip" onclick="quickAsk('Tell me a fun fact')">Fun fact</div>
+        <div class="chip" onclick="quickAsk('Write a short poem')">Write a poem</div>
+        <div class="chip" onclick="quickAsk('Help me with my studies')">Study help</div>
+        <div class="chip" onclick="quickAsk('What can you do?')">What can you do?</div>
       </div>
     </div>
   </div>
@@ -117,7 +123,6 @@
   <div class="footer-note">Powered by Gemini AI · Volta · Developed by Rushang</div>
 
   <script>
-    // Hide splash after 3 seconds
     setTimeout(() => {
       document.getElementById('splash').classList.add('hide');
       setTimeout(() => document.getElementById('splash').remove(), 900);
@@ -126,7 +131,7 @@
     const messagesEl = document.getElementById('messages');
     const inputEl = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
-    const API_KEY = 'AIzaSyCk72fMh_oo9Z3TW6BmLR1sMhBv84rAyYU';
+    const API_KEY = 'AIzaSyCk72fMh_oo9Z3TW6BmLR1sMhBv84rAyYU'; // Replace with your API key
     const history = [];
 
     function addMessage(role, text) {
@@ -195,5 +200,5 @@
     inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(inputEl.value.trim()); });
   </script>
 
-
-</body></html>
+</body>
+</html>
