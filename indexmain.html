@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)file:///C:/Users/integrated/Downloads/volta-ai.html -->
+<html lang="en" data-theme="blue"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volta AI</title>
+<!-- NETLIFY IDENTITY (Google Login) -->
+<script src="./indexmain_files/netlify-identity-widget.js.download"></script>
+<style>
+:root {
+  --p: #2563eb; --pd: #1d4ed8; --pl: #dbeafe;
+  --bg: #f1f5f9; --surface: #ffffff; --surface2: #f8fafc;
+  --text: #0f172a; --text2: #64748b; --text3: #94a3b8;
+  --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
+  --user-bubble: #2563eb; --user-text: #fff;
+  --bot-bubble: #ffffff; --bot-text: #0f172a;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+  --radius: 16px; --radius-sm: 10px;
+}
+[data-theme="dark"] {
+  --p: #3b82f6; --pd: #2563eb; --pl: #1e3a5f;
+  --bg: #09090b; --surface: #18181b; --surface2: #27272a;
+  --text: #fafafa; --text2: #a1a1aa; --text3: #71717a;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
+  --user-bubble: #3b82f6; --user-text: #fff;
+  --bot-bubble: #27272a; --bot-text: #fafafa;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+}
+[data-theme="green"] {
+  --p: #059669; --pd: #047857; --pl: #d1fae5;
+  --bg: #f0fdf4; --surface: #fff; --surface2: #f0fdf4;
+  --text: #052e16; --text2: #166534; --text3: #4ade80;
+  --border: rgba(5,150,105,0.1); --border2: rgba(5,150,105,0.2);
+  --user-bubble: #059669; --user-text: #fff;
+  --bot-bubble: #fff; --bot-text: #052e16;
+}
+[data-theme="purple"] {
+  --p: #7c3aed; --pd: #6d28d9; --pl: #ede9fe;
+  --bg: #faf5ff; --surface: #fff; --surface2: #faf5ff;
+  --text: #2e1065; --text2: #6d28d9; --text3: #a78bfa;
+  --border: rgba(124,58,237,0.1); --border2: rgba(124,58,237,0.2);
+  --user-bubble: #7c3aed; --user-text: #fff;
+  --bot-bubble: #fff; --bot-text: #2e1065;
+}
+[data-theme="rose"] {
+  --p: #e11d48; --pd: #be123c; --pl: #ffe4e6;
+  --bg: #fff1f2; --surface: #fff; --surface2: #fff1f2;
+  --text: #4c0519; --text2: #9f1239; --text3: #fb7185;
+  --border: rgba(225,29,72,0.1); --border2: rgba(225,29,72,0.2);
+  --user-bubble: #e11d48; --user-text: #fff;
+  --bot-bubble: #fff; --bot-text: #4c0519;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); height: 100dvh; display: flex; overflow: hidden; transition: background 0.3s, color 0.3s; }
+.sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; transition: transform 0.3s ease, background 0.3s; z-index: 50; overflow-y: auto; }
+.sidebar-logo { padding: 20px 18px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+.logo-icon { width: 36px; height: 36px; background: var(--p); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: white; flex-shrink: 0; }
+.logo-name { font-size: 16px; font-weight: 700; color: var(--text); }
+.logo-tag { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.sidebar-section { padding: 14px 12px 6px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+.new-chat-btn { margin: 10px 12px; background: var(--p); color: white; border: none; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.1s; width: calc(100% - 24px); }
+.new-chat-btn:hover { background: var(--pd); }
+.new-chat-btn:active { transform: scale(0.98); }
+.new-chat-btn svg { width: 15px; height: 15px; }
+.quick-chips { padding: 0 12px; display: flex; flex-direction: column; gap: 4px; }
+.quick-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12.5px; color: var(--text2); cursor: pointer; transition: background 0.15s, color 0.15s; text-align: left; font-family: inherit; }
+.quick-chip:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.history-list { padding: 0 12px; display: flex; flex-direction: column; gap: 3px; max-height: 200px; overflow-y: auto; }
+.history-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 12px; color: var(--text2); cursor: pointer; transition: background 0.15s, color 0.15s; text-align: left; font-family: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; }
+.history-item:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.history-item .hi-icon { font-size: 12px; flex-shrink: 0; }
+.history-empty { font-size: 12px; color: var(--text3); padding: 6px 12px; font-style: italic; }
+.sidebar-bottom { margin-top: auto; padding: 14px 12px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+.sidebar-btn { background: none; border: none; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: var(--text2); cursor: pointer; display: flex; align-items: center; gap: 9px; font-family: inherit; transition: background 0.15s, color 0.15s; width: 100%; text-align: left; }
+.sidebar-btn:hover { background: var(--surface2); color: var(--text); }
+.sidebar-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.dev-tag { font-size: 11px; color: var(--text3); padding: 6px 10px; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.topbar { height: 56px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 18px; gap: 10px; flex-shrink: 0; }
+.topbar-title { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+.topbar-status { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text3); }
+.status-dot { width: 7px; height: 7px; background: #22c55e; border-radius: 50%; animation: pulse 2.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.85)} }
+.topbar-btn { width: 34px; height: 34px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); transition: background 0.15s, color 0.15s; font-size: 16px; }
+.topbar-btn:hover { background: var(--pl); color: var(--p); }
+.menu-btn { display: none; }
+#messages { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
+#messages::-webkit-scrollbar { width: 4px; }
+#messages::-webkit-scrollbar-track { background: transparent; }
+#messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+.welcome-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px 24px; text-align: center; margin-bottom: 8px; box-shadow: var(--shadow-sm); }
+.welcome-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--p), var(--pd)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 16px; box-shadow: 0 4px 16px rgba(37,99,235,0.25); }
+.welcome-card h2 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.welcome-card p { font-size: 13px; color: var(--text2); line-height: 1.7; max-width: 340px; margin: 0 auto; }
+.welcome-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; justify-content: center; }
+.welcome-chip { background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px; padding: 6px 13px; font-size: 12.5px; color: var(--text2); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+.welcome-chip:hover { background: var(--pl); color: var(--p); border-color: var(--p); transform: translateY(-1px); }
+.msg { display: flex; gap: 10px; align-items: flex-end; max-width: 100%; animation: msgIn 0.25s ease; }
+@keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.msg.user { flex-direction: row-reverse; }
+.avatar { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.bot-av { background: var(--p); color: white; }
+.user-av { background: var(--pl); color: var(--p); }
+.msg-wrap { display: flex; flex-direction: column; max-width: 72%; }
+.msg.user .msg-wrap { align-items: flex-end; }
+.bubble { padding: 11px 15px; font-size: 14px; line-height: 1.7; border-radius: 18px; word-break: break-word; }
+.msg.bot .bubble { background: var(--bot-bubble); color: var(--bot-text); border: 1px solid var(--border); border-bottom-left-radius: 5px; box-shadow: var(--shadow-sm); }
+.msg.user .bubble { background: var(--user-bubble); color: var(--user-text); border-bottom-right-radius: 5px; }
+.bubble pre { background: #0f172a; color: #e2e8f0; padding: 12px 14px; border-radius: 10px; overflow-x: auto; font-size: 13px; margin: 8px 0; font-family: 'Fira Code', monospace; }
+.bubble code { background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 5px; font-size: 12.5px; }
+.bubble pre code { background: none; padding: 0; }
+.bubble strong { font-weight: 600; }
+.bubble em { font-style: italic; }
+.bubble ul, .bubble ol { padding-left: 18px; margin: 4px 0; }
+.bubble li { margin: 2px 0; }
+.file-bubble { background: var(--bot-bubble); border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); margin-bottom: 4px; }
+.file-bubble-icon { font-size: 24px; }
+.file-bubble-name { font-weight: 500; color: var(--text); font-size: 13px; }
+.file-bubble-size { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.msg-actions { display: flex; gap: 5px; margin-top: 5px; opacity: 0; transition: opacity 0.2s; }
+.msg-wrap:hover .msg-actions { opacity: 1; }
+.msg-action-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px; font-size: 11.5px; cursor: pointer; color: var(--text2); font-family: inherit; transition: all 0.15s; display: flex; align-items: center; gap: 4px; }
+.msg-action-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.msg-action-btn svg { width: 12px; height: 12px; }
+.emoji-reactions { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.reaction { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 2px 8px; font-size: 13px; cursor: pointer; transition: transform 0.15s, background 0.15s; user-select: none; }
+.reaction:hover { transform: scale(1.2); }
+.reaction.active { background: var(--pl); border-color: var(--p); }
+.typing-indicator { display: flex; gap: 5px; align-items: center; padding: 13px 15px; }
+.typing-indicator span { width: 7px; height: 7px; background: var(--p); border-radius: 50%; animation: bounce 1.3s ease-in-out infinite; opacity: 0.6; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.18s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:0.6} 30%{transform:translateY(-7px);opacity:1} }
+.input-area { padding: 14px 18px 16px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
+.input-box { display: flex; align-items: center; background: var(--surface2); border: 1.5px solid var(--border2); border-radius: 14px; padding: 4px 6px 4px 16px; gap: 8px; transition: border-color 0.2s, box-shadow 0.2s; }
+.input-box:focus-within { border-color: var(--p); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+#user-input { flex: 1; border: none; background: transparent; font-size: 14px; font-family: inherit; color: var(--text); outline: none; padding: 8px 0; resize: none; max-height: 120px; min-height: 24px; line-height: 1.5; }
+#user-input::placeholder { color: var(--text3); }
+.input-tool-btn { width: 36px; height: 36px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); transition: all 0.15s; flex-shrink: 0; font-size: 16px; position: relative; }
+.input-tool-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.input-tool-btn.recording { background: #fee2e2; color: #dc2626; border-color: #dc2626; animation: recPulse 1s ease-in-out infinite; }
+@keyframes recPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+#send-btn { width: 38px; height: 38px; background: var(--p); border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s, transform 0.1s; }
+#send-btn:hover { background: var(--pd); }
+#send-btn:active { transform: scale(0.93); }
+#send-btn:disabled { background: var(--text3); cursor: not-allowed; }
+#send-btn svg { width: 18px; height: 18px; fill: white; }
+#file-preview-strip { display: none; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.file-chip { background: var(--pl); border: 1px solid var(--p); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: var(--p); display: flex; align-items: center; gap: 5px; font-family: inherit; }
+.file-chip-remove { background: none; border: none; cursor: pointer; color: var(--p); font-size: 14px; padding: 0; line-height: 1; font-family: inherit; }
+.footer-note { text-align: center; font-size: 11px; color: var(--text3); margin-top: 8px; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: var(--surface); padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.3s ease; z-index: 9999; pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: 20px; padding: 22px; width: 300px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); }
+.modal h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.theme-opt { border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); transition: all 0.15s; background: var(--surface2); font-family: inherit; }
+.theme-opt:hover, .theme-opt.active { border-color: var(--p); background: var(--pl); color: var(--p); }
+.theme-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; }
+.modal-close { margin-top: 14px; width: 100%; padding: 10px; background: var(--p); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; font-family: inherit; transition: background 0.2s; }
+.modal-close:hover { background: var(--pd); }
+#yt-modal .modal { width: 380px; max-width: 95vw; }
+.yt-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.yt-input-row input { flex: 1; border: 1.5px solid var(--border2); border-radius: 10px; padding: 9px 12px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; }
+.yt-input-row input:focus { border-color: var(--p); }
+.yt-btn { background: #ff0000; color: white; border: none; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+.yt-btn:hover { background: #cc0000; }
+.yt-btn:disabled { background: var(--text3); cursor: not-allowed; }
+#yt-result { display: none; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; max-height: 260px; overflow-y: auto; }
+.yt-video-info { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.yt-thumb { width: 80px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.yt-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+.yt-channel { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.yt-summary-text { font-size: 13px; color: var(--text); line-height: 1.7; }
+.yt-loading { text-align: center; padding: 20px; color: var(--text2); font-size: 13px; display: none; }
+.yt-loading-dots { display: inline-flex; gap: 5px; margin-left: 6px; }
+.yt-loading-dots span { width: 6px; height: 6px; background: #ff0000; border-radius: 50%; animation: bounce 1.3s ease-in-out infinite; }
+.yt-loading-dots span:nth-child(2) { animation-delay: 0.18s; }
+.yt-loading-dots span:nth-child(3) { animation-delay: 0.36s; }
+.yt-actions { display: flex; gap: 8px; }
+.yt-action-btn { flex: 1; background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 9px; font-size: 13px; font-family: inherit; color: var(--text2); cursor: pointer; transition: all 0.15s; display: none; }
+.yt-action-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.yt-error { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 10px; padding: 12px; font-size: 13px; color: #dc2626; display: none; margin-bottom: 10px; }
+.search-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--pl); color: var(--p); border: 1px solid var(--p); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
+.search-badge svg { width: 11px; height: 11px; }
+#img-modal .modal { width: 340px; }
+.img-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.img-input-row input { flex: 1; border: 1.5px solid var(--border2); border-radius: 10px; padding: 9px 12px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; }
+.img-input-row input:focus { border-color: var(--p); }
+.img-gen-btn { background: var(--p); color: white; border: none; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+.img-gen-btn:hover { background: var(--pd); }
+.img-gen-btn:disabled { background: var(--text3); cursor: not-allowed; }
+#img-preview { width: 100%; border-radius: 12px; display: none; margin-bottom: 10px; max-height: 280px; object-fit: cover; border: 1px solid var(--border); }
+.img-placeholder { width: 100%; height: 180px; border-radius: 12px; background: var(--surface2); border: 1.5px dashed var(--border2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--text3); font-size: 13px; margin-bottom: 12px; }
+.img-placeholder span { font-size: 32px; }
+.img-loading { display: none; text-align: center; padding: 16px 0; color: var(--text2); font-size: 13px; }
+.img-loading-dots { display: inline-flex; gap: 5px; margin-left: 6px; }
+.img-loading-dots span { width: 6px; height: 6px; background: var(--p); border-radius: 50%; animation: bounce 1.3s ease-in-out infinite; }
+.img-loading-dots span:nth-child(2) { animation-delay: 0.18s; }
+.img-loading-dots span:nth-child(3) { animation-delay: 0.36s; }
+.img-actions { display: flex; gap: 8px; }
+.img-dl-btn { flex: 1; background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 9px; font-size: 13px; font-family: inherit; color: var(--text2); cursor: pointer; transition: all 0.15s; display: none; }
+.img-dl-btn:hover { background: var(--pl); color: var(--p); border-color: var(--p); }
+.img-bubble { background: var(--bot-bubble); border: 1px solid var(--border); border-radius: 18px; border-bottom-left-radius: 5px; overflow: hidden; box-shadow: var(--shadow-sm); max-width: 280px; }
+.img-bubble img { width: 100%; display: block; cursor: pointer; transition: opacity 0.2s; }
+.img-bubble img:hover { opacity: 0.92; }
+.img-bubble-caption { padding: 8px 12px; font-size: 12px; color: var(--text2); }
+@media (max-width: 640px) {
+  .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); box-shadow: var(--shadow-lg); }
+  .sidebar.open { transform: translateX(0); }
+  .menu-btn { display: flex !important; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 49; backdrop-filter: blur(2px); }
+  .sidebar-overlay.open { display: block; }
+  #messages { padding: 16px 12px; }
+  .msg-wrap { max-width: 85%; }
+  .input-area { padding: 10px 12px 14px; }
+  .topbar { padding: 0 12px; }
+  #yt-modal .modal { width: 95vw; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1e3a5f,#2563eb);display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;">
+  <div style="background:white;border-radius:24px;padding:40px 36px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:360px;width:90%;">
+    <div style="width:64px;height:64px;background:#2563eb;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:white;margin:0 auto 20px;">V</div>
+    <h1 style="font-size:22px;font-weight:700;color:#0f172a;margin-bottom:8px;">Welcome to Volta AI</h1>
+    <p style="font-size:13px;color:#64748b;margin-bottom:28px;line-height:1.6;">Sign in to start chatting with your smart AI assistant</p>
+    <button onclick="netlifyIdentity.open(&#39;login&#39;)" style="width:100%;padding:13px 20px;border:1.5px solid #e2e8f0;border-radius:12px;background:white;cursor:pointer;font-size:14px;font-weight:600;color:#0f172a;display:flex;align-items:center;justify-content:center;gap:12px;font-family:inherit;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+      <svg width="20" height="20" viewBox="0 0 48 48">
+        <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.3 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.6-8 19.6-20 0-1.3-.1-2.7-.4-4z"></path>
+        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.4 6.3 14.7z"></path>
+        <path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.4-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.1v5.5C9.5 39.7 16.3 44 24 44z"></path>
+        <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.4-4.6 5.8l6.2 5.2C40.9 35.6 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"></path>
+      </svg>
+      Continue with Google
+    </button>
+    <p style="font-size:11px;color:#94a3b8;margin-top:20px;">Free · Secure · No spam ever</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- THEME MODAL -->
+<div id="theme-modal" class="modal-overlay">
+  <div class="modal">
+    <h3>Choose a theme</h3>
+    <div class="theme-grid">
+      <button class="theme-opt active" onclick="setTheme(&#39;blue&#39;)"><div class="theme-dot" style="background:#2563eb"></div>Blue</button>
+      <button class="theme-opt" onclick="setTheme(&#39;dark&#39;)"><div class="theme-dot" style="background:#18181b;border:1px solid #555"></div>Dark</button>
+      <button class="theme-opt" onclick="setTheme(&#39;green&#39;)"><div class="theme-dot" style="background:#059669"></div>Green</button>
+      <button class="theme-opt" onclick="setTheme(&#39;purple&#39;)"><div class="theme-dot" style="background:#7c3aed"></div>Purple</button>
+      <button class="theme-opt" onclick="setTheme(&#39;rose&#39;)"><div class="theme-dot" style="background:#e11d48"></div>Rose</button>
+    </div>
+    <button class="modal-close" onclick="closeModal(&#39;theme-modal&#39;)">Done</button>
+  </div>
+</div>
+
+<!-- IMAGE MODAL -->
+<div id="img-modal" class="modal-overlay">
+  <div class="modal">
+    <h3>🎨 Generate an image</h3>
+    <div class="img-input-row">
+      <input id="img-prompt" type="text" placeholder="Describe your image...">
+      <button class="img-gen-btn" id="img-gen-btn" onclick="generateImage()">Generate</button>
+    </div>
+    <div class="img-placeholder" id="img-placeholder"><span>🖼️</span><div>Your image will appear here</div></div>
+    <div class="img-loading" id="img-loading">Generating<div class="img-loading-dots"><span></span><span></span><span></span></div></div>
+    <img id="img-preview" alt="Generated image">
+    <div class="img-actions">
+      <button class="img-dl-btn" id="img-dl-btn" onclick="downloadImage()">⬇️ Download</button>
+      <button class="img-dl-btn" id="img-send-btn" onclick="sendImageToChat()" style="display:none">💬 Send to chat</button>
+    </div>
+    <button class="modal-close" onclick="closeModal(&#39;img-modal&#39;)" style="margin-top:10px">Close</button>
+  </div>
+</div>
+
+<!-- YOUTUBE MODAL -->
+<div id="yt-modal" class="modal-overlay">
+  <div class="modal">
+    <h3>▶️ YouTube Summarizer</h3>
+    <div class="yt-input-row">
+      <input id="yt-url" type="text" placeholder="Paste YouTube URL here...">
+      <button class="yt-btn" id="yt-sum-btn" onclick="summarizeYoutube()">Summarize</button>
+    </div>
+    <div class="yt-error" id="yt-error"></div>
+    <div class="yt-loading" id="yt-loading">Fetching transcript &amp; summarizing<div class="yt-loading-dots"><span></span><span></span><span></span></div></div>
+    <div id="yt-result">
+      <div class="yt-video-info" id="yt-video-info"></div>
+      <div class="yt-summary-text" id="yt-summary-text"></div>
+    </div>
+    <div class="yt-actions">
+      <button class="yt-action-btn" id="yt-copy-btn" onclick="copyYtSummary()">📋 Copy summary</button>
+      <button class="yt-action-btn" id="yt-chat-btn" onclick="sendYtSummaryToChat()">💬 Send to chat</button>
+    </div>
+    <button class="modal-close" onclick="closeModal(&#39;yt-modal&#39;)" style="margin-top:12px">Close</button>
+  </div>
+</div>
+
+<input type="file" id="file-input" style="display:none" multiple="" accept="image/*,.pdf,.txt,.md,.csv,.json,.js,.py,.html,.css" onchange="handleFileSelect(event)">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">V</div>
+    <div><div class="logo-name">Volta AI</div><div class="logo-tag">Your AI assistant</div></div>
+  </div>
+  <button class="new-chat-btn" onclick="clearChat()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    New chat
+  </button>
+  <div class="sidebar-section">Recent chats</div>
+  <div class="history-list" id="history-list"><div class="history-empty">No chats yet</div></div>
+  <div class="sidebar-section">Try asking</div>
+  <div class="quick-chips">
+    <button class="quick-chip" onclick="quickAsk(&#39;Tell me a fun fact&#39;)">💡 Tell me a fun fact</button>
+    <button class="quick-chip" onclick="quickAsk(&#39;Write a short poem&#39;)">✍️ Write a short poem</button>
+    <button class="quick-chip" onclick="quickAsk(&#39;Help me with my studies&#39;)">📚 Help with studies</button>
+    <button class="quick-chip" onclick="quickAsk(&#39;Explain how AI works&#39;)">🤖 How does AI work?</button>
+    <button class="quick-chip" onclick="quickAsk(&#39;Give me a coding tip&#39;)">💻 Coding tip</button>
+    <button class="quick-chip" onclick="openImgModal()">🎨 Generate an image</button>
+    <button class="quick-chip" onclick="openYtModal()">▶️ Summarize a YouTube video</button>
+    <button class="quick-chip" onclick="toggleWebSearch()">🔍 Toggle web search</button>
+  </div>
+  <div class="sidebar-bottom">
+    <button class="sidebar-btn" onclick="document.getElementById(&#39;theme-modal&#39;).classList.add(&#39;open&#39;)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"></path></svg>
+      Themes
+    </button>
+    <button class="sidebar-btn" onclick="toggleDark()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      Dark mode
+    </button>
+    <button class="sidebar-btn" onclick="clearAllHistory()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6M9 6V4h6v2"></path></svg>
+      Clear history
+    </button>
+    <div class="dev-tag">⚡ Developed by Rushang</div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <button class="topbar-btn menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <span class="topbar-title">Volta AI</span>
+    <div class="topbar-status"><div class="status-dot"></div>Online</div>
+    <button class="topbar-btn" id="topbar-search-btn" onclick="toggleWebSearch()" title="Toggle web search" style="font-size:14px">🔍</button>
+    <button class="topbar-btn" onclick="openYtModal()" title="YouTube Summarizer" style="font-size:14px">▶️</button>
+    <button class="topbar-btn" onclick="clearChat()" title="Clear chat" style="margin-left:2px">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6M9 6V4h6v2"></path></svg>
+    </button>
+  </div>
+
+  <div id="messages">
+    <div class="welcome-card">
+      <div class="welcome-icon">⚡</div>
+      <h2>Welcome to Volta!</h2>
+      <p>I'm your smart AI assistant — now with YouTube summaries, web search, voice input, and file uploads!</p>
+      <div class="welcome-chips">
+        <button class="welcome-chip" onclick="quickAsk(&#39;Tell me a fun fact&#39;)">Fun fact</button>
+        <button class="welcome-chip" onclick="quickAsk(&#39;Write a short poem&#39;)">Write a poem</button>
+        <button class="welcome-chip" onclick="openYtModal()">▶️ Summarize YouTube</button>
+        <button class="welcome-chip" onclick="quickAsk(&#39;What can you do?&#39;)">What can you do?</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div id="file-preview-strip"></div>
+    <div class="input-box">
+      <textarea id="user-input" placeholder="Ask Volta anything... or paste a YouTube link!" rows="1" autocomplete="off"></textarea>
+      <button class="input-tool-btn" id="voice-btn" onclick="toggleVoice()" title="Voice input">🎤</button>
+      <button class="input-tool-btn" id="file-btn" onclick="document.getElementById(&#39;file-input&#39;).click()" title="Attach file or image">📎</button>
+      <button class="input-tool-btn" id="img-trigger-btn" onclick="openImgModal()" title="Generate image">🎨</button>
+      <button id="send-btn" aria-label="Send">
+        <svg viewBox="0 0 24 24"><path d="M2 12L22 2L15 22L11 13L2 12Z"></path></svg>
+      </button>
+    </div>
+    <div class="footer-note" id="footer-note">Powered by Llama AI · Volta by Rushang · 🔍 Web search <span id="ws-status">OFF</span></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+// ─── NETLIFY GOOGLE LOGIN ─────────────────────────────────────────────────────
+netlifyIdentity.on('init', user => {
+  if (!user) {
+    document.getElementById('login-overlay').style.display = 'flex';
+  } else {
+    document.getElementById('login-overlay').style.display = 'none';
+    showUserAvatar(user);
+  }
+});
+netlifyIdentity.on('login', user => {
+  document.getElementById('login-overlay').style.display = 'none';
+  netlifyIdentity.close();
+  showUserAvatar(user);
+});
+netlifyIdentity.on('logout', () => {
+  document.getElementById('login-overlay').style.display = 'flex';
+});
+function showUserAvatar(user) {
+  const topbar = document.querySelector('.topbar');
+  const existing = document.getElementById('user-avatar');
+  if (existing) existing.remove();
+  const name = user.user_metadata?.full_name || user.email;
+  const pic = user.user_metadata?.avatar_url;
+  const avatar = document.createElement('div');
+  avatar.id = 'user-avatar';
+  avatar.title = name;
+  avatar.style.cssText = 'width:32px;height:32px;border-radius:50%;overflow:hidden;cursor:pointer;flex-shrink:0;border:2px solid var(--p);';
+  avatar.innerHTML = pic
+    ? '<img src="' + pic + '" width="32" height="32" style="border-radius:50%">'
+    : '<div style="width:32px;height:32px;background:var(--p);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">' + name[0].toUpperCase() + '</div>';
+  avatar.onclick = () => { if (confirm('Sign out of Volta AI?')) netlifyIdentity.logout(); };
+  topbar.appendChild(avatar);
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg, dur) {
+  dur = dur || 2500;
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ─── THEME ────────────────────────────────────────────────────────────────────
+window.setTheme = function(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('volta-theme', t);
+  document.querySelectorAll('.theme-opt').forEach(o => o.classList.remove('active'));
+  document.querySelectorAll('.theme-opt').forEach(o => {
+    if (o.textContent.trim().toLowerCase().startsWith(t === 'rose' ? 'r' : t === 'dark' ? 'd' : t[0])) o.classList.add('active');
+  });
+};
+window.toggleDark = function() {
+  const c = document.documentElement.getAttribute('data-theme');
+  if (c === 'dark') window.setTheme(localStorage.getItem('volta-prev') || 'blue');
+  else { localStorage.setItem('volta-prev', c); window.setTheme('dark'); }
+};
+window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
+const saved = localStorage.getItem('volta-theme');
+if (saved) window.setTheme(saved);
+
+// ─── SIDEBAR ──────────────────────────────────────────────────────────────────
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+};
+window.closeSidebar = function() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+};
+
+// ─── CHAT HISTORY ─────────────────────────────────────────────────────────────
+const HISTORY_KEY = 'volta-chat-history';
+let savedSessions = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+function saveCurrentSession(messages) {
+  if (!messages || messages.length < 2) return;
+  const firstUser = messages.find(m => m.role === 'user');
+  if (!firstUser) return;
+  const label = firstUser.content.slice(0, 60);
+  const session = { id: Date.now(), label, messages, ts: Date.now() };
+  savedSessions.unshift(session);
+  if (savedSessions.length > 20) savedSessions = savedSessions.slice(0, 20);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(savedSessions));
+  renderHistoryList();
+}
+function renderHistoryList() {
+  const list = document.getElementById('history-list');
+  if (savedSessions.length === 0) { list.innerHTML = '<div class="history-empty">No chats yet</div>'; return; }
+  list.innerHTML = savedSessions.map((s, i) => '<button class="history-item" onclick="loadSession(' + i + ')" title="' + s.label + '"><span class="hi-icon">💬</span>' + s.label + '</button>').join('');
+}
+window.loadSession = function(i) {
+  const session = savedSessions[i];
+  if (!session) return;
+  if (history.filter(m => m.role !== 'system').length > 0) saveCurrentSession(history.slice(1));
+  history.length = 1;
+  session.messages.forEach(m => history.push(m));
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = '';
+  session.messages.forEach(m => {
+    if (m.role === 'user') addMessage('user', m.content);
+    else if (m.role === 'assistant') addMessage('bot', m.content);
+  });
+  closeSidebar();
+  showToast('📂 Session loaded');
+};
+window.clearAllHistory = function() {
+  savedSessions = [];
+  localStorage.removeItem(HISTORY_KEY);
+  renderHistoryList();
+  showToast('🗑️ History cleared');
+};
+renderHistoryList();
+
+// ─── CLEAR CHAT ───────────────────────────────────────────────────────────────
+window.clearChat = function() {
+  if (history.filter(m => m.role !== 'system').length > 0) saveCurrentSession(history.slice(1));
+  document.getElementById('messages').innerHTML = '<div class="welcome-card"><div class="welcome-icon">⚡</div><h2>Welcome to Volta!</h2><p>I\'m your smart AI assistant — now with YouTube summaries, web search, voice input, and file uploads!</p><div class="welcome-chips"><button class="welcome-chip" onclick="quickAsk(\'Tell me a fun fact\')">Fun fact</button><button class="welcome-chip" onclick="quickAsk(\'Write a short poem\')">Write a poem</button><button class="welcome-chip" onclick="openYtModal()">▶️ Summarize YouTube</button><button class="welcome-chip" onclick="quickAsk(\'What can you do?\')">What can you do?</button></div></div>';
+  history.length = 1;
+  pendingFiles = [];
+  renderFileStrip();
+  window.closeSidebar();
+};
+
+// ─── WEB SEARCH ───────────────────────────────────────────────────────────────
+let webSearchEnabled = false;
+window.toggleWebSearch = function() {
+  webSearchEnabled = !webSearchEnabled;
+  document.getElementById('ws-status').textContent = webSearchEnabled ? 'ON' : 'OFF';
+  document.getElementById('ws-status').style.color = webSearchEnabled ? '#22c55e' : 'inherit';
+  const btn = document.getElementById('topbar-search-btn');
+  btn.style.background = webSearchEnabled ? 'var(--pl)' : '';
+  btn.style.borderColor = webSearchEnabled ? 'var(--p)' : '';
+  showToast(webSearchEnabled ? '🔍 Web search ON' : '🔍 Web search OFF');
+};
+async function doWebSearch(query) {
+  try {
+    const url = 'https://api.duckduckgo.com/?q=' + encodeURIComponent(query) + '&format=json&no_redirect=1&no_html=1&skip_disambig=1';
+    const res = await fetch(url);
+    const data = await res.json();
+    let results = '';
+    if (data.AbstractText) results += 'Summary: ' + data.AbstractText + '\n';
+    if (data.Answer) results += 'Answer: ' + data.Answer + '\n';
+    if (data.RelatedTopics && data.RelatedTopics.length > 0) {
+      const topics = data.RelatedTopics.slice(0, 4).filter(t => t.Text).map(t => '- ' + t.Text).join('\n');
+      if (topics) results += 'Related:\n' + topics + '\n';
+    }
+    if (!results) {
+      const wikiRes = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(query.split(' ').slice(0,3).join('_')));
+      if (wikiRes.ok) { const w = await wikiRes.json(); if (w.extract) results = 'Wikipedia: ' + w.extract.slice(0, 600); }
+    }
+    return results || null;
+  } catch(e) { return null; }
+}
+
+// ─── VOICE INPUT ──────────────────────────────────────────────────────────────
+let recognition = null, isRecording = false;
+window.toggleVoice = function() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { showToast('❌ Voice not supported. Try Chrome!'); return; }
+  if (isRecording) { recognition.stop(); return; }
+  const SRClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SRClass();
+  recognition.lang = 'en-US'; recognition.continuous = false; recognition.interimResults = true;
+  recognition.onstart = () => { isRecording = true; document.getElementById('voice-btn').classList.add('recording'); document.getElementById('voice-btn').textContent = '⏹'; showToast('🎤 Listening... speak now'); };
+  recognition.onresult = (e) => { let interim = '', final = ''; for (let i = e.resultIndex; i < e.results.length; i++) { if (e.results[i].isFinal) final += e.results[i][0].transcript; else interim += e.results[i][0].transcript; } document.getElementById('user-input').value = final || interim; autoResizeInput(); };
+  recognition.onend = () => { isRecording = false; document.getElementById('voice-btn').classList.remove('recording'); document.getElementById('voice-btn').textContent = '🎤'; if (document.getElementById('user-input').value.trim()) showToast('✅ Voice captured!'); };
+  recognition.onerror = (e) => { isRecording = false; document.getElementById('voice-btn').classList.remove('recording'); document.getElementById('voice-btn').textContent = '🎤'; showToast('❌ Voice error: ' + e.error); };
+  recognition.start();
+};
+
+// ─── FILE UPLOAD ──────────────────────────────────────────────────────────────
+let pendingFiles = [];
+window.handleFileSelect = function(e) {
+  Array.from(e.target.files).forEach(f => { if (pendingFiles.length >= 5) { showToast('Max 5 files at once'); return; } pendingFiles.push(f); });
+  e.target.value = ''; renderFileStrip();
+};
+function renderFileStrip() {
+  const strip = document.getElementById('file-preview-strip');
+  if (pendingFiles.length === 0) { strip.style.display = 'none'; strip.innerHTML = ''; return; }
+  strip.style.display = 'flex';
+  strip.innerHTML = pendingFiles.map((f, i) => '<div class="file-chip">' + getFileIcon(f) + ' ' + (f.name.length > 20 ? f.name.slice(0,18)+'…' : f.name) + '<button class="file-chip-remove" onclick="removeFile(' + i + ')">×</button></div>').join('');
+}
+window.removeFile = function(i) { pendingFiles.splice(i, 1); renderFileStrip(); };
+function getFileIcon(f) { if (f.type.startsWith('image/')) return '🖼️'; if (f.type === 'application/pdf') return '📄'; if (f.name.endsWith('.py')) return '🐍'; if (f.name.endsWith('.js')) return '🟨'; if (f.name.endsWith('.html') || f.name.endsWith('.css')) return '🌐'; return '📎'; }
+async function readFilesAsText(files) {
+  const results = [];
+  for (const f of files) {
+    try {
+      if (f.type.startsWith('image/')) { const b64 = await fileToBase64(f); results.push({ name: f.name, type: 'image', b64, mimeType: f.type }); }
+      else { const text = await f.text(); results.push({ name: f.name, type: 'text', content: text.slice(0, 8000) }); }
+    } catch(e) { results.push({ name: f.name, type: 'error' }); }
+  }
+  return results;
+}
+function fileToBase64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; r.readAsDataURL(file); }); }
+
+// ─── YOUTUBE SUMMARIZER ───────────────────────────────────────────────────────
+window.openYtModal = function() { document.getElementById('yt-modal').classList.add('open'); document.getElementById('yt-url').focus(); closeSidebar(); };
+function extractVideoId(url) {
+  const patterns = [/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/, /youtube\.com\/shorts\/([^&\n?#]+)/];
+  for (const p of patterns) { const m = url.match(p); if (m) return m[1]; }
+  return null;
+}
+let ytSummaryText = '', ytVideoTitle = '';
+window.summarizeYoutube = async function() {
+  const url = document.getElementById('yt-url').value.trim();
+  const videoId = extractVideoId(url);
+  const errEl = document.getElementById('yt-error'), loadEl = document.getElementById('yt-loading'), resultEl = document.getElementById('yt-result');
+  const copyBtn = document.getElementById('yt-copy-btn'), chatBtn = document.getElementById('yt-chat-btn'), sumBtn = document.getElementById('yt-sum-btn');
+  errEl.style.display = 'none'; resultEl.style.display = 'none'; copyBtn.style.display = 'none'; chatBtn.style.display = 'none'; ytSummaryText = '';
+  if (!videoId) { errEl.textContent = '❌ Please paste a valid YouTube URL'; errEl.style.display = 'block'; return; }
+  sumBtn.disabled = true; loadEl.style.display = 'block';
+  try {
+    let title = 'YouTube Video', channelName = '';
+    const thumbUrl = 'https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg';
+    try { const r = await fetch('https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=' + videoId + '&format=json'); if (r.ok) { const o = await r.json(); title = o.title || title; channelName = o.author_name || ''; } } catch(e) {}
+    ytVideoTitle = title;
+    let transcript = '', transcriptSource = '';
+    try { const r = await fetch('https://yt-transcript-api.vercel.app/transcript?videoId=' + videoId); if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length > 0) { transcript = d.map(s => s.text).join(' ').slice(0, 10000); transcriptSource = 'transcript'; } } } catch(e) {}
+    if (!transcript) { try { const r = await fetch('https://api.kome.ai/api/tools/youtube-transcripts?video_id=' + videoId + '&format=true'); if (r.ok) { const d = await r.json(); if (d.transcript) { transcript = d.transcript.slice(0, 10000); transcriptSource = 'transcript'; } } } catch(e) {} }
+    if (!transcript) transcriptSource = 'title-only';
+    const promptContent = transcript
+      ? 'Here is the transcript of a YouTube video titled "' + title + '" by ' + channelName + ':\n\n' + transcript + '\n\nPlease provide a comprehensive summary with:\n1. Main topic (1 sentence)\n2. Key points (bullet list)\n3. Key takeaways (2-3 sentences)'
+      : 'A YouTube video is titled: "' + title + '" by channel: "' + channelName + '".\nI could not fetch the transcript. Based on the title, please:\n1. Explain what this video is likely about\n2. List likely key points\n3. Suggest what viewers would learn\nMake it clear this is based on the title only.';
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'system', content: 'You are an expert at summarizing YouTube videos.' }, { role: 'user', content: promptContent }], max_tokens: 1024 }) });
+    const groqData = await groqRes.json();
+    const summary = groqData.choices?.[0]?.message?.content || 'Could not generate summary.';
+    ytSummaryText = summary;
+    loadEl.style.display = 'none';
+    document.getElementById('yt-video-info').innerHTML = '<img class="yt-thumb" src="' + thumbUrl + '" alt="thumbnail" onerror="this.style.display=\'none\'"><div><div class="yt-title">' + title + '</div>' + (channelName ? '<div class="yt-channel">by ' + channelName + '</div>' : '') + (transcriptSource === 'title-only' ? '<div class="yt-channel" style="color:#f59e0b;margin-top:4px">⚠️ Summary based on title only</div>' : '<div class="yt-channel" style="color:#22c55e;margin-top:4px">✅ Summarized from transcript</div>') + '</div>';
+    document.getElementById('yt-summary-text').innerHTML = renderMarkdown(summary);
+    resultEl.style.display = 'block'; copyBtn.style.display = 'block'; chatBtn.style.display = 'block';
+  } catch(e) { loadEl.style.display = 'none'; errEl.textContent = '❌ Something went wrong: ' + e.message; errEl.style.display = 'block'; }
+  sumBtn.disabled = false;
+};
+window.copyYtSummary = function() { if (!ytSummaryText) return; navigator.clipboard.writeText('📺 ' + ytVideoTitle + '\n\n' + ytSummaryText); showToast('📋 Summary copied!'); };
+window.sendYtSummaryToChat = function() { if (!ytSummaryText) return; closeModal('yt-modal'); const msg = '📺 **YouTube Summary: ' + ytVideoTitle + '**\n\n' + ytSummaryText; addMessage('bot', msg); history.push({ role: 'assistant', content: msg }); };
+function isYouTubeUrl(text) { return /(?:youtube\.com\/watch|youtu\.be\/|youtube\.com\/shorts\/)/.test(text); }
+
+// ─── MARKDOWN ─────────────────────────────────────────────────────────────────
+function renderMarkdown(text) {
+  return text
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => '<pre><code>' + code.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</code></pre>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^#{1,3} (.+)$/gm, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '• $1')
+    .replace(/\n/g, '<br>');
+}
+
+// ─── TTS ──────────────────────────────────────────────────────────────────────
+let ttsActive = null;
+function speak(text, btn) {
+  if (ttsActive) { window.speechSynthesis.cancel(); ttsActive.innerHTML = ttsIcon(); ttsActive = null; return; }
+  const utt = new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g,''));
+  btn.textContent = '⏹'; ttsActive = btn;
+  utt.onend = () => { btn.innerHTML = ttsIcon(); ttsActive = null; };
+  window.speechSynthesis.speak(utt);
+}
+function ttsIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'; }
+function copyIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'; }
+function copyText(text) { navigator.clipboard.writeText(text.replace(/<[^>]+>/g,'')); showToast('📋 Copied!'); }
+
+// ─── ADD MESSAGE ──────────────────────────────────────────────────────────────
+const messagesEl = document.getElementById('messages');
+function addMessage(role, text, searchUsed) {
+  const wrap = document.createElement('div'); wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+  const av = document.createElement('div'); av.className = 'avatar ' + (role === 'user' ? 'user-av' : 'bot-av'); av.textContent = role === 'user' ? 'U' : 'V';
+  const msgWrap = document.createElement('div'); msgWrap.className = 'msg-wrap';
+  if (searchUsed) { const badge = document.createElement('div'); badge.className = 'search-badge'; badge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Web searched'; msgWrap.appendChild(badge); }
+  const bubble = document.createElement('div'); bubble.className = 'bubble';
+  if (role === 'bot') bubble.innerHTML = renderMarkdown(text); else bubble.textContent = text;
+  msgWrap.appendChild(bubble);
+  if (role === 'bot') {
+    const actions = document.createElement('div'); actions.className = 'msg-actions';
+    const copyBtn = document.createElement('button'); copyBtn.className = 'msg-action-btn'; copyBtn.innerHTML = copyIcon() + ' Copy';
+    copyBtn.onclick = () => { copyText(text); copyBtn.innerHTML = '✓ Copied'; setTimeout(() => { copyBtn.innerHTML = copyIcon() + ' Copy'; }, 1500); };
+    const ttsBtn = document.createElement('button'); ttsBtn.className = 'msg-action-btn'; ttsBtn.innerHTML = ttsIcon(); ttsBtn.onclick = () => speak(text, ttsBtn);
+    actions.appendChild(copyBtn); actions.appendChild(ttsBtn); msgWrap.appendChild(actions);
+    const reactionRow = document.createElement('div'); reactionRow.className = 'emoji-reactions';
+    ['👍','❤️','😂','🤔','🔥'].forEach(e => { const btn = document.createElement('span'); btn.className = 'reaction'; btn.textContent = e; btn.onclick = () => btn.classList.toggle('active'); reactionRow.appendChild(btn); });
+    msgWrap.appendChild(reactionRow);
+  }
+  wrap.appendChild(av); wrap.appendChild(msgWrap);
+  messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+function showTyping() { const wrap = document.createElement('div'); wrap.className = 'msg bot'; wrap.id = 'typing'; wrap.innerHTML = '<div class="avatar bot-av">V</div><div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>'; messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight; }
+function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+// ─── CORE ─────────────────────────────────────────────────────────────────────
+const inputEl = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const API_KEY = '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';
+const history = [{ role: 'system', content: 'You are Volta, a smart, friendly, and helpful AI assistant. Answer every question clearly and simply. Be polite and helpful. Keep responses concise and easy to understand. When web search results are provided, use them to give up-to-date, accurate answers.' }];
+
+// ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
+async function sendMessage(text) {
+  text = text ? text.trim() : '';
+  const files = [...pendingFiles];
+  if (!text && files.length === 0) return;
+  if (text && isYouTubeUrl(text) && files.length === 0) { document.getElementById('yt-url').value = text; inputEl.value = ''; inputEl.style.height = 'auto'; openYtModal(); summarizeYoutube(); return; }
+  inputEl.value = ''; inputEl.style.height = 'auto'; pendingFiles = []; renderFileStrip(); sendBtn.disabled = true;
+  if (files.length > 0) { files.forEach(f => { const wrap = document.createElement('div'); wrap.className = 'msg user'; const av = document.createElement('div'); av.className = 'avatar user-av'; av.textContent = 'U'; const mw = document.createElement('div'); mw.className = 'msg-wrap'; mw.style.alignItems = 'flex-end'; const fb = document.createElement('div'); fb.className = 'file-bubble'; fb.innerHTML = '<span class="file-bubble-icon">' + getFileIcon(f) + '</span><div><div class="file-bubble-name">' + f.name + '</div><div class="file-bubble-size">' + (f.size/1024).toFixed(1) + ' KB</div></div>'; mw.appendChild(fb); wrap.appendChild(av); wrap.appendChild(mw); messagesEl.appendChild(wrap); }); }
+  if (text) addMessage('user', text); else addMessage('user', '📎 ' + files.map(f=>f.name).join(', '));
+  showTyping();
+  try {
+    let userContent = '', searchUsed = false;
+    if (webSearchEnabled && text) { const sr = await doWebSearch(text); if (sr) { searchUsed = true; userContent += '[Web Search Results for "' + text + '"]:\n' + sr + '\n\n'; } }
+    if (files.length > 0) { const fd = await readFilesAsText(files); fd.forEach(f => { if (f.type === 'text') userContent += '[File: ' + f.name + ']\n' + f.content + '\n\n'; else if (f.type === 'image') userContent += '[Image: ' + f.name + ']\n'; }); }
+    if (text) userContent += text; else userContent += 'I have shared some file(s) above. Please help me with them.';
+    history.push({ role: 'user', content: userContent });
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY }, body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: history, max_tokens: 1024 }) });
+    const data = await res.json();
+    removeTyping();
+    const reply = data.choices?.[0]?.message?.content || 'Sorry, I could not get a response.';
+    history.push({ role: 'assistant', content: reply });
+    addMessage('bot', reply, searchUsed);
+    if (history.filter(m => m.role !== 'system').length >= 2) saveCurrentSession(history.slice(1));
+  } catch(e) { removeTyping(); addMessage('bot', 'Oops! Something went wrong: ' + e.message); }
+  sendBtn.disabled = false; inputEl.focus();
+}
+window.quickAsk = function(text) { sendMessage(text); };
+window.sendMessage = sendMessage;
+sendBtn.addEventListener('click', () => sendMessage(inputEl.value.trim()));
+inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(inputEl.value.trim()); } });
+function autoResizeInput() { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px'; }
+inputEl.addEventListener('input', autoResizeInput);
+
+// ─── IMAGE GENERATOR ──────────────────────────────────────────────────────────
+let lastImgUrl = '', lastImgPrompt = '';
+window.openImgModal = function(prefill) { document.getElementById('img-modal').classList.add('open'); if (prefill) document.getElementById('img-prompt').value = prefill; document.getElementById('img-prompt').focus(); };
+window.generateImage = async function() {
+  const prompt = document.getElementById('img-prompt').value.trim(); if (!prompt) return;
+  const genBtn = document.getElementById('img-gen-btn'), preview = document.getElementById('img-preview'), placeholder = document.getElementById('img-placeholder'), loading = document.getElementById('img-loading'), dlBtn = document.getElementById('img-dl-btn'), sendBtn2 = document.getElementById('img-send-btn');
+  genBtn.disabled = true; genBtn.textContent = '...'; placeholder.style.display = 'none'; preview.style.display = 'none'; loading.style.display = 'block'; dlBtn.style.display = 'none'; sendBtn2.style.display = 'none';
+  const seed = Math.floor(Math.random() * 999999);
+  const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=512&height=512&seed=' + seed + '&nologo=true';
+  lastImgUrl = url; lastImgPrompt = prompt;
+  const img = new Image();
+  img.onload = () => { loading.style.display = 'none'; preview.src = url; preview.style.display = 'block'; dlBtn.style.display = 'block'; sendBtn2.style.display = 'block'; genBtn.disabled = false; genBtn.textContent = 'Generate'; };
+  img.onerror = () => { loading.style.display = 'none'; placeholder.style.display = 'flex'; placeholder.innerHTML = '<span>❌</span><div>Failed to generate. Try again!</div>'; genBtn.disabled = false; genBtn.textContent = 'Generate'; };
+  img.src = url;
+};
+window.downloadImage = function() { const a = document.createElement('a'); a.href = lastImgUrl; a.download = 'volta-image.jpg'; a.target = '_blank'; a.click(); };
+window.sendImageToChat = function() {
+  const wrap = document.createElement('div'); wrap.className = 'msg bot';
+  const av = document.createElement('div'); av.className = 'avatar bot-av'; av.textContent = 'V';
+  const msgWrap = document.createElement('div'); msgWrap.className = 'msg-wrap';
+  const bubble = document.createElement('div'); bubble.className = 'img-bubble';
+  bubble.innerHTML = '<img src="' + lastImgUrl + '" alt="' + lastImgPrompt + '" onclick="window.open(\'' + lastImgUrl + '\',\'_blank\')" /><div class="img-bubble-caption">🎨 "' + lastImgPrompt + '"</div>';
+  msgWrap.appendChild(bubble); wrap.appendChild(av); wrap.appendChild(msgWrap);
+  messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight;
+  closeModal('img-modal');
+};
+const _origSend = window.sendMessage;
+window.sendMessage = async function(text) {
+  if (text) {
+    const imgMatch = text.match(/^(generate|create|make|draw|show)\s+(an?\s+)?image\s+(of\s+)?(.+)/i);
+    if (imgMatch) {
+      const prompt = imgMatch[4];
+      addMessage('user', text); history.push({ role: 'user', content: text }); showTyping();
+      setTimeout(() => {
+        removeTyping();
+        const wrap = document.createElement('div'); wrap.className = 'msg bot';
+        const av = document.createElement('div'); av.className = 'avatar bot-av'; av.textContent = 'V';
+        const msgWrap = document.createElement('div'); msgWrap.className = 'msg-wrap';
+        const bubble = document.createElement('div'); bubble.className = 'img-bubble';
+        const seed = Math.floor(Math.random() * 999999);
+        const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=512&height=512&seed=' + seed + '&nologo=true';
+        bubble.innerHTML = '<img src="' + url + '" alt="' + prompt + '" onclick="window.open(\'' + url + '\',\'_blank\')" /><div class="img-bubble-caption">🎨 "' + prompt + '" — click to open full size</div>';
+        msgWrap.appendChild(bubble); wrap.appendChild(av); wrap.appendChild(msgWrap);
+        messagesEl.appendChild(wrap); messagesEl.scrollTop = messagesEl.scrollHeight;
+      }, 800);
+      if (inputEl) { inputEl.value = ''; inputEl.style.height = 'auto'; }
+      if (sendBtn) sendBtn.disabled = false;
+      return;
+    }
+  }
+  return _origSend(text);
+};
+document.getElementById('img-prompt').addEventListener('keydown', e => { if (e.key === 'Enter') generateImage(); });
+document.getElementById('yt-url').addEventListener('keydown', e => { if (e.key === 'Enter') summarizeYoutube(); });
+
+}); // end DOMContentLoaded
+</script>
+
+<iframe id="netlify-identity-widget" title="Netlify identity widget" style="position: fixed; top: 0; left: 0; border: none; width: 100%; height: 100%; overflow: visible; background: transparent; display: none; z-index: 99; " src="./indexmain_files/saved_resource.html"></iframe></body></html>
