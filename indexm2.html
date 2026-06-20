@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volta AI</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, system-ui, sans-serif;
+      background: #f5f7fb;
+      color: #121212;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top center, #ffffff, #eef2f8 40%);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: #ffffff;
+      border-right: 1px solid #e6eaf2;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 22px;
+      gap: 24px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #5b78ff, #6d5cff);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .sidebar p {
+      margin: 0;
+      color: #5f6d7f;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      color: #1d2537;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease;
+      font-size: 0.96rem;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: #f2f6ff;
+      color: #1f3bff;
+    }
+
+    .nav-item span {
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      background: #eef2ff;
+      border-radius: 10px;
+      color: #3b5bff;
+      font-size: 0.85rem;
+    }
+
+    .sidebar .section-title {
+      margin: 0;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #556475;
+      text-transform: uppercase;
+    }
+
+    .main {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: clamp(2rem, 2.6vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .topbar-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .meta-badge,
+    .login-btn,
+    .upgrade-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .meta-badge {
+      background: #eef2ff;
+      color: #2246ff;
+    }
+
+    .login-btn {
+      background: #1c1f4a;
+      color: #ffffff;
+    }
+
+    .upgrade-btn {
+      background: #ffffff;
+      color: #1c1f4a;
+      border: 1px solid #d8dde6;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.82);
+      padding: 30px;
+      border-radius: 32px;
+      box-shadow: 0 40px 120px rgba(15, 25, 54, 0.08);
+      border: 1px solid rgba(226, 231, 240, 0.9);
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero-card p {
+      margin: 0;
+      color: #586579;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .input-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .search-bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      background: #f8fbff;
+      border: 1px solid #e4e9f5;
+      border-radius: 999px;
+      padding: 16px 22px;
+    }
+
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 1rem;
+      color: #0f172a;
+      min-width: 0;
+    }
+
+    .search-bar button {
+      border: none;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #000000;
+      color: #ffffff;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pill-btn {
+      background: #ffffff;
+      border: 1px solid #e6eaf2;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      color: #223248;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .pill-btn:hover {
+      transform: translateY(-1px);
+      border-color: #c9d3e6;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid #e6eaf2;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(15, 25, 54, 0.05);
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1f2a44;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: #596a82;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .chat-panel {
+      background: #ffffff;
+      border-radius: 30px;
+      padding: 26px;
+      border: 1px solid #e8eef7;
+      box-shadow: 0 30px 80px rgba(15, 25, 54, 0.06);
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .chat-messages {
+      display: grid;
+      gap: 14px;
+    }
+
+    .message {
+      padding: 18px;
+      border-radius: 22px;
+      max-width: 74%;
+      line-height: 1.75;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: #1f3bff;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: #f4f8ff;
+      color: #1f2c55;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message span {
+      display: block;
+    }
+
+    .message.user small,
+    .message.bot small {
+      display: block;
+      margin-top: 10px;
+      opacity: 0.75;
+      font-size: 0.82rem;
+    }
+
+    .bottom-input {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+    }
+
+    .bottom-input input {
+      border: 1px solid #dfe7f1;
+      border-radius: 999px;
+      padding: 16px 18px;
+      outline: none;
+      font-size: 1rem;
+      color: #121924;
+    }
+
+    .bottom-input button {
+      border: none;
+      background: #1f3bff;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 0 24px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .login-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: #eef4ff;
+      border-radius: 22px;
+      border: 1px solid #dde7f8;
+      color: #1f3153;
+      gap: 16px;
+    }
+
+    .login-panel p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .login-panel button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      background: #1f3bff;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #d8e2ff;
+      display: grid;
+      place-items: center;
+      color: #1f3bff;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .main {
+        padding: 24px 18px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .sidebar {
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar-meta {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .search-bar {
+        padding: 14px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-mark">V</div>
+        <div>
+          <div class="brand-title">Volta AI</div>
+          <p>Smart chat, fast answers.</p>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="section-title">Quick access</div>
+        <ul class="nav-list">
+          <li><a href="#" class="nav-item active"><span>+</span> New chat</a></li>
+          <li><a href="#" class="nav-item"><span>🔍</span> Search chats</a></li>
+          <li><a href="#" class="nav-item"><span>📁</span> Projects</a></li>
+          <li><a href="#" class="nav-item"><span>🧠</span> Ideas</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="section-title">Features</div>
+        <p>Write, summarize, search, and create — all from one modern AI workspace.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1>What’s on the agenda today?</h1>
+          <p style="color:#5c6a80; font-size:0.97rem; margin:12px 0 0;">
+            Type anything and Volta AI will help you brainstorm, write, or learn faster.
+          </p>
+        </div>
+
+        <div class="topbar-meta">
+          <button class="upgrade-btn">Upgrade</button>
+          <button class="login-btn" id="loginBtn">Sign in</button>
+        </div>
+      </div>
+
+      <section class="hero-card">
+        <div class="input-panel">
+          <div class="search-bar">
+            <input id="promptInput" type="text" placeholder="Ask anything — start with 'Explain', 'Plan', 'Create'..." />
+            <button id="sendBtn">➤</button>
+          </div>
+          <div class="action-buttons">
+            <button class="pill-btn">Create an image</button>
+            <button class="pill-btn">Write or edit</button>
+            <button class="pill-btn">Look something up</button>
+          </div>
+        </div>
+
+        <div class="login-panel" id="loginPanel">
+          <div>
+            <h3 style="margin: 0 0 8px; font-size: 1rem;">Firebase login required</h3>
+            <p>Sign in with Google to start chatting and save your AI sessions securely.</p>
+          </div>
+          <button id="loginAction">Continue with Google</button>
+        </div>
+      </section>
+
+      <section class="features-grid">
+        <div class="feature-card">
+          <h3>AI chat made easy</h3>
+          <p>Ask follow-up questions, get clear answers, and keep your conversation going with intelligent context.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Fast thinking for every task</h3>
+          <p>From writing emails and code to summarizing ideas, Volta AI gives you instant help in one place.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Smart tools built in</h3>
+          <p>Launch image creation, text rewriting, and research shortcuts directly from the home screen.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Your AI hub</h3>
+          <p>Keep your sessions, drafts, and recent queries neatly organized with a clean, modern workspace.</p>
+        </div>
+      </section>
+
+      <section class="chat-panel" id="chatPanel">
+        <div class="status">
+          <div class="avatar" id="userAvatar">G</div>
+          <div>
+            <strong id="userName">Guest</strong>
+            <div style="font-size:0.9rem; color:#6d7b91;">Signed in user</div>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot">
+            <span>Welcome to Volta AI. Ask me anything and I’ll help you get started.</span>
+            <small>AI assistant</small>
+          </div>
+        </div>
+
+        <div class="bottom-input">
+          <input id="chatInput" type="text" placeholder="Send a message..." />
+          <button id="chatSend">Send</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const apiEndpoint = "/api/generate"; // Update with your backend AI proxy endpoint if needed
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    const loginBtn = document.getElementById("loginBtn");
+    const loginAction = document.getElementById("loginAction");
+    const loginPanel = document.getElementById("loginPanel");
+    const chatPanel = document.getElementById("chatPanel");
+    const userName = document.getElementById("userName");
+    const userAvatar = document.getElementById("userAvatar");
+    const promptInput = document.getElementById("promptInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatInput = document.getElementById("chatInput");
+    const chatSend = document.getElementById("chatSend");
+    const chatMessages = document.getElementById("chatMessages");
+
+    function showChat() {
+      loginPanel.classList.add("hidden");
+      chatPanel.style.display = "flex";
+      loginBtn.textContent = "Sign out";
+    }
+
+    function hideChat() {
+      loginPanel.classList.remove("hidden");
+      chatPanel.style.display = "none";
+      loginBtn.textContent = "Sign in";
+      userName.textContent = "Guest";
+      userAvatar.textContent = "G";
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        showChat();
+        userName.textContent = user.displayName || "Volta User";
+        userAvatar.textContent = user.displayName ? user.displayName[0].toUpperCase() : "V";
+      } else {
+        hideChat();
+      }
+    });
+
+    function signIn() {
+      auth.signInWithPopup(provider).catch(err => {
+        alert("Login failed: " + err.message);
+      });
+    }
+
+    function signOut() {
+      auth.signOut();
+    }
+
+    loginBtn.addEventListener("click", () => {
+      if (auth.currentUser) signOut();
+      else signIn();
+    });
+
+    loginAction.addEventListener("click", signIn);
+
+    function appendMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.className = `message ${sender}`;
+      msg.innerHTML = `<span>${text}</span>`;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendPrompt(prompt) {
+      if (!prompt) return;
+      appendMessage(prompt, "user");
+
+      const responseText = "Volta AI is preparing a response…"; // Default fallback
+      appendMessage(responseText, "bot");
+
+      // Example backend call placeholder:
+      // Uncomment and update `apiEndpoint` to your working backend endpoint.
+      /*
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        const reply = data?.response || "Sorry, I could not fetch a result.";
+        appendMessage(reply, "bot");
+      } catch (err) {
+        appendMessage("Unable to get AI answer. Please try again later.", "bot");
+      }
+      */
+    }
+
+    sendBtn.addEventListener("click", () => {
+      sendPrompt(promptInput.value.trim());
+      promptInput.value = "";
+    });
+
+    chatSend.addEventListener("click", () => {
+      sendPrompt(chatInput.value.trim());
+      chatInput.value = "";
+    });
+
+    promptInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        sendPrompt(promptInput.value.trim());
+        promptInput.value = "";
+      }
+    });
+
+    chatInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        sendPrompt(chatInput.value.trim());
+        chatInput.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
